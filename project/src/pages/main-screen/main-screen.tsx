@@ -1,6 +1,12 @@
 import Card from '../../components/card/card';
 
-function MainScreen() : JSX.Element{
+type PromoFilm = {
+  promoFilmName: string;
+  promoFilmGenre: string;
+  promoFilmDate: string;
+}
+
+function MainScreen({promoFilmName, promoFilmGenre, promoFilmDate} : PromoFilm) : JSX.Element{
   return (
     <section className="main-screen">
       <section className="film-card">
@@ -33,10 +39,10 @@ function MainScreen() : JSX.Element{
               <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
             </div>
             <div className="film-card__desc">
-              <h2 className="film-card__title">The Grand Budapest Hotel</h2>
+              <h2 className="film-card__title">{promoFilmName}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">Drama</span>
-                <span className="film-card__year">2014</span>
+                <span className="film-card__genre">{promoFilmGenre}</span>
+                <span className="film-card__year">{promoFilmDate}</span>
               </p>
               <div className="film-card__buttons">
                 <button className="btn btn--play film-card__button" type="button">

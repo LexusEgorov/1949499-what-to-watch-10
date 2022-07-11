@@ -8,6 +8,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App />
+    <App promoFilmName='The Grand Budapest Hotel' promoFilmDate='2014' promoFilmGenre='Drama'/>
   </React.StrictMode>,
 );
