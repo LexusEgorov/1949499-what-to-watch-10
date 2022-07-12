@@ -1,13 +1,18 @@
 import MainScreen from '../../pages/main-screen/main-screen';
 
 type PromoFilm = {
-  promoFilmName: string;
-  promoFilmGenre: string;
-  promoFilmDate: string;
-}
+  name: string;
+  genre: string;
+  date: number;
+};
 
-function App({promoFilmName, promoFilmGenre, promoFilmDate} : PromoFilm): JSX.Element {
-  return <MainScreen promoFilmName={promoFilmName} promoFilmGenre={promoFilmGenre} promoFilmDate={promoFilmDate}/>;
+type AppProps = {
+  promoFilm : PromoFilm,
+  films: number[],
+};
+
+function App({promoFilm, films} : AppProps): JSX.Element {
+  return <MainScreen promoFilm={promoFilm} films={films} />;
 }
 
 export default App;

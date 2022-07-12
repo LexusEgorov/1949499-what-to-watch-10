@@ -1,12 +1,18 @@
 import Card from '../../components/card/card';
 
 type PromoFilm = {
-  promoFilmName: string;
-  promoFilmGenre: string;
-  promoFilmDate: string;
-}
+  name: string;
+  genre: string;
+  date: number;
+};
 
-function MainScreen({promoFilmName, promoFilmGenre, promoFilmDate} : PromoFilm) : JSX.Element{
+type AppProps = {
+  promoFilm : PromoFilm,
+  films: number[],
+};
+
+function MainScreen({promoFilm, films} : AppProps) : JSX.Element{
+  const {name, genre, date} = promoFilm;
   return (
     <section className="main-screen">
       <section className="film-card">
@@ -39,10 +45,10 @@ function MainScreen({promoFilmName, promoFilmGenre, promoFilmDate} : PromoFilm) 
               <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
             </div>
             <div className="film-card__desc">
-              <h2 className="film-card__title">{promoFilmName}</h2>
+              <h2 className="film-card__title">{name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{promoFilmGenre}</span>
-                <span className="film-card__year">{promoFilmDate}</span>
+                <span className="film-card__genre">{genre}</span>
+                <span className="film-card__year">{date}</span>
               </p>
               <div className="film-card__buttons">
                 <button className="btn btn--play film-card__button" type="button">
@@ -99,26 +105,9 @@ function MainScreen({promoFilmName, promoFilmGenre, promoFilmDate} : PromoFilm) 
             </li>
           </ul>
           <div className="catalog__films-list">
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
+            {
+              films.map((film) => (<Card key={film}/>))
+            }
           </div>
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>

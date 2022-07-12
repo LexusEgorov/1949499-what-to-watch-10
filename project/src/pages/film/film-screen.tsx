@@ -1,11 +1,11 @@
 type Film = {
-  filmName: string;
-  filmGenre: string;
-  filmDate: number;
-  filmDirector: string;
+  name: string;
+  genre: string;
+  date: number;
+  director: string;
 };
 
-function FilmScreen({filmName, filmGenre, filmDate, filmDirector} : Film) : JSX.Element {
+function FilmScreen({name, genre, date, director} : Film) : JSX.Element {
   return (
     <section className="film-card film-card--full">
       <div className="film-card__hero">
@@ -34,10 +34,10 @@ function FilmScreen({filmName, filmGenre, filmDate, filmDirector} : Film) : JSX.
         </header>
         <div className="film-card__wrap">
           <div className="film-card__desc">
-            <h2 className="film-card__title">{filmName}</h2>
+            <h2 className="film-card__title">{name}</h2>
             <p className="film-card__meta">
-              <span className="film-card__genre">{filmGenre}</span>
-              <span className="film-card__year">{filmDate}</span>
+              <span className="film-card__genre">{genre}</span>
+              <span className="film-card__year">{date}</span>
             </p>
             <div className="film-card__buttons">
               <button className="btn btn--play film-card__button" type="button">
@@ -87,7 +87,7 @@ function FilmScreen({filmName, filmGenre, filmDate, filmDirector} : Film) : JSX.
             <div className="film-card__text">
               <p>In the 1930s, the Grand Budapest Hotel is a popular European ski resort, presided over by concierge Gustave H. (Ralph Fiennes). Zero, a junior lobby boy, becomes Gustave&apos;s friend and protege.</p>
               <p>Gustave prides himself on providing first-class service to the hotel&apos;s guests, including satisfying the sexual needs of the many elderly women who stay there. When one of Gustave&apos;s lovers dies mysteriously, Gustave finds himself the recipient of a priceless painting and the chief suspect in her murder.</p>
-              <p className="film-card__director"><strong>Director: {filmDirector}</strong></p>
+              <p className="film-card__director"><strong>Director: {director}</strong></p>
               <p className="film-card__starring"><strong>Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe and other</strong></p>
             </div>
           </div>
