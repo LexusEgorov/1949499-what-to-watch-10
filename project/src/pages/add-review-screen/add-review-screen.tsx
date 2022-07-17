@@ -1,4 +1,9 @@
+import { useParams } from 'react-router-dom';
+
 function AddRewiewScreen(): JSX.Element {
+  const params = useParams();
+  // eslint-disable-next-line no-console
+  console.log(params);
   return (
     <section className="film-card film-card--full">
       <div className="film-card__header">
