@@ -1,9 +1,8 @@
-import { Fragment } from 'react';
 import { Outlet } from 'react-router-dom';
 
-export default function Layout(){
+function Layout(){
   return(
-    <Fragment>
+    <>
       <div className="visually-hidden">
         <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <symbol id="add" viewBox="0 0 19 20">
@@ -38,6 +37,8 @@ export default function Layout(){
       <main>
         <Outlet />
       </main>
-    </Fragment>
+    </>
   );
 }
+
+export default Layout;
