@@ -1,10 +1,13 @@
+import { Link } from 'react-router-dom';
 import './error.css';
 
-export default function ErrorScreen() : JSX.Element{
+function ErrorScreen() : JSX.Element{
   return (
     <section className="error">
       <p>404 Not Found</p>
-      <a href="">To the main page</a>
+      <Link to="/">To the main page</Link>
     </section>
   );
 }
+
+export default ErrorScreen;

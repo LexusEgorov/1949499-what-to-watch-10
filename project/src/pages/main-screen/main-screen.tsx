@@ -1,4 +1,5 @@
-import Card from '../../components/card/card';
+import FilmsList from '../../components/films-list/films-list';
+import Films from '../../types/films';
 
 type PromoFilm = {
   name: string;
@@ -8,7 +9,7 @@ type PromoFilm = {
 
 type AppProps = {
   promoFilm : PromoFilm,
-  films: number[],
+  films: Films,
 };
 
 function MainScreen({promoFilm, films} : AppProps) : JSX.Element{
@@ -104,11 +105,7 @@ function MainScreen({promoFilm, films} : AppProps) : JSX.Element{
               <a href="#" className="catalog__genres-link">Thrillers</a>
             </li>
           </ul>
-          <div className="catalog__films-list">
-            {
-              films.map((film) => (<Card key={film}/>))
-            }
-          </div>
+          <FilmsList films={films}/>
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
           </div>

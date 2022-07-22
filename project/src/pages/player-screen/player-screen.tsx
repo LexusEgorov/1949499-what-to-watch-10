@@ -1,6 +1,11 @@
 import { useParams } from 'react-router-dom';
+import Films from '../../types/films';
 
-function PlayerScreen(): JSX.Element {
+type PlayerScreenProps = {
+  films: Films;
+};
+
+function PlayerScreen({films} : PlayerScreenProps): JSX.Element {
   const params = useParams();
   // eslint-disable-next-line no-console
   console.log(params);

@@ -9,6 +9,7 @@ import FilmScreen from '../../pages/film-screen/film-screen';
 import AddRewiewScreen from '../../pages/add-review-screen/add-review-screen';
 import PlayerScreen from '../../pages/player-screen/player-screen';
 import PrivateRoute from '../private-route/private-route';
+import Films from '../../types/films';
 
 type PromoFilm = {
   name: string;
@@ -18,7 +19,7 @@ type PromoFilm = {
 
 type AppProps = {
   promoFilm : PromoFilm,
-  films: number[],
+  films: Films,
 };
 
 function App({promoFilm, films} : AppProps): JSX.Element {
@@ -28,15 +29,15 @@ function App({promoFilm, films} : AppProps): JSX.Element {
         <Route path={AppRoute.Root} element={<Layout />}>
           <Route index element={<MainScreen promoFilm={promoFilm} films={films}/>} />
           <Route path={AppRoute.SignIn} element={<SignInScreen />} />
-          <Route path={AppRoute.Film} element={<FilmScreen />} />
-          <Route path={AppRoute.Player} element={<PlayerScreen />} />
+          <Route path={AppRoute.Film} element={<FilmScreen films={films}/>} />
+          <Route path={AppRoute.Player} element={<PlayerScreen films={films}/>} />
           <Route
             path={AppRoute.MyList}
             element={
               <PrivateRoute
                 authorizationStatus={AuthorizationStatus.NoAuth}
               >
-                <MyListScreen/>
+                <MyListScreen films={films}/>
               </PrivateRoute>
             }
           />
@@ -46,7 +47,7 @@ function App({promoFilm, films} : AppProps): JSX.Element {
               <PrivateRoute
                 authorizationStatus={AuthorizationStatus.NoAuth}
               >
-                <AddRewiewScreen/>
+                <AddRewiewScreen films={films}/>
               </PrivateRoute>
             }
           />

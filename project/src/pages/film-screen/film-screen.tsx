@@ -1,9 +1,13 @@
 import { useParams } from 'react-router-dom';
+import Films from '../../types/films';
 
-function FilmScreen() : JSX.Element {
+type FilmScreenProps = {
+  films: Films;
+};
+
+function FilmScreen({films} : FilmScreenProps) : JSX.Element {
   const params = useParams();
-  // eslint-disable-next-line no-console
-  console.log(params);
+  const currentFilm = films.find((film) => film.id === Number(params.id));
   return (
     <section className="film-card film-card--full">
       <div className="film-card__hero">
@@ -32,10 +36,10 @@ function FilmScreen() : JSX.Element {
         </header>
         <div className="film-card__wrap">
           <div className="film-card__desc">
-            <h2 className="film-card__title">Name</h2>
+            <h2 className="film-card__title">{currentFilm?.name}</h2>
             <p className="film-card__meta">
-              <span className="film-card__genre">Drama</span>
-              <span className="film-card__year">2015</span>
+              <span className="film-card__genre">{currentFilm?.genre}</span>
+              <span className="film-card__year">{currentFilm?.year}</span>
             </p>
             <div className="film-card__buttons">
               <button className="btn btn--play film-card__button" type="button">
@@ -76,16 +80,16 @@ function FilmScreen() : JSX.Element {
               </ul>
             </nav>
             <div className="film-rating">
-              <div className="film-rating__score">8,9</div>
+              <div className="film-rating__score">{currentFilm?.ratingScore}</div>
               <p className="film-rating__meta">
-                <span className="film-rating__level">Very good</span>
-                <span className="film-rating__count">240 ratings</span>
+                <span className="film-rating__level">{currentFilm?.ratingLevel}</span>
+                <span className="film-rating__count">{currentFilm?.ratingCount} ratings</span>
               </p>
             </div>
             <div className="film-card__text">
               <p>In the 1930s, the Grand Budapest Hotel is a popular European ski resort, presided over by concierge Gustave H. (Ralph Fiennes). Zero, a junior lobby boy, becomes Gustave&apos;s friend and protege.</p>
               <p>Gustave prides himself on providing first-class service to the hotel&apos;s guests, including satisfying the sexual needs of the many elderly women who stay there. When one of Gustave&apos;s lovers dies mysteriously, Gustave finds himself the recipient of a priceless painting and the chief suspect in her murder.</p>
-              <p className="film-card__director"><strong>Director: Film Director</strong></p>
+              <p className="film-card__director"><strong>Director: {currentFilm?.director}</strong></p>
               <p className="film-card__starring"><strong>Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe and other</strong></p>
             </div>
           </div>
