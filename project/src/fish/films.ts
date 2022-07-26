@@ -11,7 +11,9 @@ const FISH_FILMS : Films = [
     ratingLevel: 'Good',
     ratingCount: 292568,
     director: 'Jon Wright',
-    about: ''
+    about: '',
+    posterSrc: '',
+    videoSrc: 'https://10.react.pages.academy/static/film/video/dog.mp4',
   },
   {
     id: 2,
@@ -23,7 +25,9 @@ const FISH_FILMS : Films = [
     ratingLevel: 'Good',
     ratingCount: 788312,
     director: 'Frank Darabont',
-    about: ''
+    about: '',
+    posterSrc: '',
+    videoSrc: 'https://10.react.pages.academy/static/film/video/traffic.mp4',
   },
   {
     id: 3,
@@ -35,7 +39,9 @@ const FISH_FILMS : Films = [
     ratingLevel: 'Good',
     ratingCount: 463689,
     director: 'Guy Ritchie',
-    about: ''
+    about: '',
+    posterSrc: '',
+    videoSrc: 'https://10.react.pages.academy/static/film/video/traffic.mp4',
   },
   {
     id: 4,
@@ -47,7 +53,9 @@ const FISH_FILMS : Films = [
     ratingLevel: 'Good',
     ratingCount: 248577,
     director: 'Алексей Балабанов',
-    about: ''
+    about: '',
+    posterSrc: '',
+    videoSrc: 'https://10.react.pages.academy/static/film/video/dog.mp4',
   },
   {
     id: 5,
@@ -59,7 +67,9 @@ const FISH_FILMS : Films = [
     ratingLevel: 'Good',
     ratingCount: 452065,
     director: 'Ron Howard',
-    about: ''
+    about: '',
+    posterSrc: '',
+    videoSrc: 'https://10.react.pages.academy/static/film/video/traffic.mp4',
   },
   {
     id: 6,
@@ -71,7 +81,9 @@ const FISH_FILMS : Films = [
     ratingLevel: 'Good',
     ratingCount: 870173,
     director: 'James Cameron',
-    about: ''
+    about: '',
+    posterSrc: '',
+    videoSrc: 'https://10.react.pages.academy/static/film/video/dog.mp4',
   },
   {
     id: 7,
@@ -83,7 +95,9 @@ const FISH_FILMS : Films = [
     ratingLevel: 'Good',
     ratingCount: 49817,
     director: 'Alex Hardcastle',
-    about: ''
+    about: '',
+    posterSrc: '',
+    videoSrc: 'https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4',
   },
   {
     id: 8,
@@ -95,7 +109,9 @@ const FISH_FILMS : Films = [
     ratingLevel: 'Good',
     ratingCount: 179110,
     director: 'Steve Pink',
-    about: ''
+    about: '',
+    posterSrc: '',
+    videoSrc: 'https://10.react.pages.academy/static/film/video/dog.mp4',
   }
 ];
 
