@@ -9,6 +9,8 @@ type Film = {
   ratingCount: number;
   director: string;
   about: string;
+  posterSrc: string;
+  videoSrc: string;
 };
 
 export default Film;
