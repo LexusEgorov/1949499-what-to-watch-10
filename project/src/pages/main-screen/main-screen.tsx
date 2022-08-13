@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
 import Films from '../../types/films';
 
@@ -23,11 +24,11 @@ function MainScreen({promoFilm, films} : AppProps) : JSX.Element{
         <h1 className="visually-hidden">WTW</h1>
         <header className="page-header film-card__head">
           <div className="logo">
-            <a className="logo__link">
+            <Link to='/' className="logo__link">
               <span className="logo__letter logo__letter--1">W</span>
               <span className="logo__letter logo__letter--2">T</span>
               <span className="logo__letter logo__letter--3">W</span>
-            </a>
+            </Link>
           </div>
           <ul className="user-block">
             <li className="user-block__item">
@@ -105,7 +106,7 @@ function MainScreen({promoFilm, films} : AppProps) : JSX.Element{
               <a href="#" className="catalog__genres-link">Thrillers</a>
             </li>
           </ul>
-          <FilmsList films={films}/>
+          <FilmsList films={films} genre=''/>
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
           </div>
