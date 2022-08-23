@@ -75,7 +75,7 @@ function FilmScreen({films} : FilmScreenProps) : JSX.Element {
       <div className="page-content">
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
-          <FilmsList films={films} genre={currentFilm?.genre} />
+          <FilmsList films={films} genre={currentFilm?.genre} currentFilm={currentFilm}/>
         </section>
         <footer className="page-footer">
           <div className="logo">
