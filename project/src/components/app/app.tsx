@@ -32,9 +32,9 @@ function App({promoFilm, films} : AppProps): JSX.Element {
     <BrowserRouter>
       <Routes>
         <Route path={AppRoute.Root} element={<Layout />}>
-          <Route index element={<MainScreen promoFilm={promoFilm} films={films}/>} />
+          <Route index element={<MainScreen promoFilm={promoFilm}/>} />
           <Route path={AppRoute.SignIn} element={<SignInScreen />} />
-          <Route path={AppRoute.Film} element={<FilmScreen films={films}/>} />
+          <Route path={AppRoute.Film} element={<FilmScreen />} />
           <Route path={AppRoute.Player} element={<PlayerScreen films={films}/>} />
           <Route
             path={AppRoute.MyList}

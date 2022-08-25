@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
-import Films from '../../types/films';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { Action } from '../../store/action';
+import { selectCurrentFilm, selectFilms, selectFilteredFilms } from '../../store/selectors';
 
 type PromoFilm = {
   name: string;
@@ -11,11 +13,21 @@ type PromoFilm = {
 
 type AppProps = {
   promoFilm : PromoFilm,
-  films: Films,
 };
 
-function MainScreen({promoFilm, films} : AppProps) : JSX.Element{
+function MainScreen({promoFilm} : AppProps) : JSX.Element{
   const {name, genre, date} = promoFilm;
+
+  const dispatch = useAppDispatch();
+  const currentFilm = selectCurrentFilm(useAppSelector((state) => state));
+  if(currentFilm.id){
+    dispatch(Action.FILM.SET_CURRENT({currentFilm: -1}));
+    dispatch(Action.GENRE.SET({genre: 'All genres'}));
+  }
+
+  const films = selectFilms(useAppSelector((state) => state));
+  const filteredFilms = selectFilteredFilms(useAppSelector((state) => state));
+
   return (
     <section className="main-screen">
       <section className="film-card">
@@ -76,7 +88,7 @@ function MainScreen({promoFilm, films} : AppProps) : JSX.Element{
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
           <GenresList films={films}/>
-          <FilmsList films={films} genre='' currentFilm={undefined}/>
+          <FilmsList films={filteredFilms}/>
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
           </div>

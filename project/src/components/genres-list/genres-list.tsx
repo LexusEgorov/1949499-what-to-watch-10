@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { Action } from '../../store/action';
+import { selectCurrentGenre } from '../../store/selectors';
 import Films from '../../types/films';
+import classNames from 'classnames';
 
 type GenresListProps = {
   films: Films;
@@ -8,7 +11,8 @@ type GenresListProps = {
 
 function GenresList({films} : GenresListProps) : JSX.Element {
   const dispatch = useAppDispatch();
-  const currentGenre = useAppSelector((state) => state.currentGenre);
+  const currentGenre = selectCurrentGenre(useAppSelector((state) => state));
+
   const genres : Set<string> = new Set();
   genres.add('All genres');
   films.forEach((film) => genres.add(film.genre));
@@ -17,7 +21,13 @@ function GenresList({films} : GenresListProps) : JSX.Element {
     <ul className="catalog__genres-list">
       {
         [...genres].map((genre) => (
-          <li className={`catalog__genres-item ${currentGenre === genre ? 'catalog__genres-item--active' : ''}`} key={genre}>
+          <li key={genre}
+            className={
+              classNames('catalog__genres-item', {
+                'catalog__genres-item--active': currentGenre === genre
+              })
+            }
+          >
             <a href="#" className="catalog__genres-link"
               onClick={(evt) => {
                 evt.preventDefault();
