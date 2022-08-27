@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { Action } from '../../store/action';
-import { selectCurrentGenre } from '../../store/selectors';
 import Films from '../../types/films';
 import classNames from 'classnames';
 
@@ -11,7 +10,7 @@ type GenresListProps = {
 
 function GenresList({films} : GenresListProps) : JSX.Element {
   const dispatch = useAppDispatch();
-  const currentGenre = selectCurrentGenre(useAppSelector((state) => state));
+  const {currentGenre} = useAppSelector((state) => state);
 
   const genres : Set<string> = new Set();
   genres.add('All genres');

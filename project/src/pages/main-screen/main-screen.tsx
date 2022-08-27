@@ -3,7 +3,7 @@ import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { Action } from '../../store/action';
-import { selectCurrentFilm, selectFilms, selectFilteredFilms } from '../../store/selectors';
+import { selectFilteredFilms } from '../../store/selectors';
 
 type PromoFilm = {
   name: string;
@@ -19,13 +19,12 @@ function MainScreen({promoFilm} : AppProps) : JSX.Element{
   const {name, genre, date} = promoFilm;
 
   const dispatch = useAppDispatch();
-  const currentFilm = selectCurrentFilm(useAppSelector((state) => state));
+  const {currentFilm, films} = useAppSelector((state) => state);
   if(currentFilm.id){
     dispatch(Action.FILM.SET_CURRENT({currentFilm: -1}));
     dispatch(Action.GENRE.SET({genre: 'All genres'}));
   }
 
-  const films = selectFilms(useAppSelector((state) => state));
   const filteredFilms = selectFilteredFilms(useAppSelector((state) => state));
 
   return (
