@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { Action } from '../../store/action';
-import { selectFilteredFilms } from '../../store/selectors';
+import Header from '../../components/header/header';
+import { useAppSelector } from '../../hooks/hooks';
+import { getFilteredFilms } from '../../store/selectors';
 
 type PromoFilm = {
   name: string;
@@ -17,15 +16,8 @@ type AppProps = {
 
 function MainScreen({promoFilm} : AppProps) : JSX.Element{
   const {name, genre, date} = promoFilm;
-
-  const dispatch = useAppDispatch();
-  const {currentFilm, films} = useAppSelector((state) => state);
-  if(currentFilm.id){
-    dispatch(Action.FILM.SET_CURRENT({currentFilm: -1}));
-    dispatch(Action.GENRE.SET({genre: 'All genres'}));
-  }
-
-  const filteredFilms = selectFilteredFilms(useAppSelector((state) => state));
+  const {films} = useAppSelector((state) => state);
+  const filteredFilms = useAppSelector(getFilteredFilms);
 
   return (
     <section className="main-screen">
@@ -33,26 +25,7 @@ function MainScreen({promoFilm} : AppProps) : JSX.Element{
         <div className="film-card__bg">
           <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
         </div>
-        <h1 className="visually-hidden">WTW</h1>
-        <header className="page-header film-card__head">
-          <div className="logo">
-            <Link to='/' className="logo__link">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </Link>
-          </div>
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-              </div>
-            </li>
-            <li className="user-block__item">
-              <a className="user-block__link">Sign out</a>
-            </li>
-          </ul>
-        </header>
+        <Header />
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">

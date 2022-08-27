@@ -1,24 +1,16 @@
-import { createSelector } from 'reselect';
 import { DEFAULT_FILTER } from '../const';
+import Films from '../types/films';
 import { State } from '../types/types';
 
-export const selectFilms = (state : State) => state.films;
+export const getFilteredFilms = (state: State) : Films => {
+  const {films, currentGenre, currentFilm} = state;
+  if(currentFilm.id){
+    return films.filter((film) => film.genre === currentFilm.genre && film !== currentFilm).slice(0,4);
+  }
 
-export const selectCurrentFilm = (state: State) => state.currentFilm;
+  if(currentGenre === DEFAULT_FILTER){
+    return films;
+  }
 
-export const selectCurrentGenre = (state: State) => state.currentGenre;
-
-export const selectFilteredFilms = createSelector(
-  [selectFilms, selectCurrentGenre, selectCurrentFilm],
-  (films, currentGenre, currentFilm) => {
-    if(currentFilm.id){
-      return films.filter((film) => film.genre === currentFilm.genre && film !== currentFilm).slice(0, 4);
-    }
-
-    if(currentGenre === DEFAULT_FILTER){
-      return films;
-    }
-
-    return films.filter((film) => film.genre === currentGenre);
-  },
-);
+  return films.filter((film) => film.genre === currentGenre);
+};
