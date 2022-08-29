@@ -20,3 +20,5 @@ export enum FilmTabs {
 }
 
 export const DEFAULT_FILTER = 'All genres';
+
+export const SIMILAR_FILMS_COUNT = 4;

@@ -1,7 +1,11 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import Header from '../../components/header/header';
+import { DEFAULT_FILTER } from '../../const';
 import { useAppSelector } from '../../hooks/hooks';
+import { Action } from '../../store/action';
 import { getFilteredFilms } from '../../store/selectors';
 
 type PromoFilm = {
@@ -15,9 +19,16 @@ type AppProps = {
 };
 
 function MainScreen({promoFilm} : AppProps) : JSX.Element{
+  const dispatch = useDispatch();
+
   const {name, genre, date} = promoFilm;
   const {films} = useAppSelector((state) => state);
   const filteredFilms = useAppSelector(getFilteredFilms);
+
+  useEffect(() => {
+    dispatch(Action.GENRE.SET({genre: DEFAULT_FILTER}));
+    dispatch(Action.FILM.SET_CURRENT({currentFilm: -1}));
+  }, [dispatch]);
 
   return (
     <section className="main-screen">
