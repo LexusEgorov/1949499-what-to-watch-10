@@ -18,3 +18,5 @@ export enum FilmTabs {
   Details = 'DETAILS',
   Reviews = 'REVIEWS',
 }
+
+export const DEFAULT_FILTER = 'All genres';

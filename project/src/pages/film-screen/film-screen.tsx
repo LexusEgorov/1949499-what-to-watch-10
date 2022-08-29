@@ -1,15 +1,17 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
+import Header from '../../components/header/header';
 import Tabs from '../../components/tabs/tabs';
-import Films from '../../types/films';
+import { useAppSelector } from '../../hooks/hooks';
+import { getFilteredFilms } from '../../store/selectors';
 
-type FilmScreenProps = {
-  films: Films;
-};
+function FilmScreen() : JSX.Element {
+  // eslint-disable-next-line no-console
+  console.log('film');
 
-function FilmScreen({films} : FilmScreenProps) : JSX.Element {
-  const params = useParams();
-  const currentFilm = films.find((film) => film.id === Number(params.id));
+  const {currentFilm} = useAppSelector((state) => state);
+  const filteredFilms = useAppSelector(getFilteredFilms);
+
   return (
     <>
       <section className="film-card film-card--full">
@@ -17,32 +19,13 @@ function FilmScreen({films} : FilmScreenProps) : JSX.Element {
           <div className="film-card__bg">
             <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
           </div>
-          <h1 className="visually-hidden">WTW</h1>
-          <header className="page-header film-card__head">
-            <div className="logo">
-              <Link to='/' className="logo__link">
-                <span className="logo__letter logo__letter--1">W</span>
-                <span className="logo__letter logo__letter--2">T</span>
-                <span className="logo__letter logo__letter--3">W</span>
-              </Link>
-            </div>
-            <ul className="user-block">
-              <li className="user-block__item">
-                <div className="user-block__avatar">
-                  <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-                </div>
-              </li>
-              <li className="user-block__item">
-                <a className="user-block__link">Sign out</a>
-              </li>
-            </ul>
-          </header>
+          <Header />
           <div className="film-card__wrap">
             <div className="film-card__desc">
-              <h2 className="film-card__title">{currentFilm?.name}</h2>
+              <h2 className="film-card__title">{currentFilm.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{currentFilm?.genre}</span>
-                <span className="film-card__year">{currentFilm?.year}</span>
+                <span className="film-card__genre">{currentFilm.genre}</span>
+                <span className="film-card__year">{currentFilm.year}</span>
               </p>
               <div className="film-card__buttons">
                 <button className="btn btn--play film-card__button" type="button">
@@ -58,7 +41,7 @@ function FilmScreen({films} : FilmScreenProps) : JSX.Element {
                   <span>My list</span>
                   <span className="film-card__count">9</span>
                 </button>
-                <Link to={`/films/${currentFilm?.id}/review`} className="btn film-card__button">Add review</Link>
+                <Link to={`/films/${currentFilm.id}/review`} className="btn film-card__button">Add review</Link>
               </div>
             </div>
           </div>
@@ -75,7 +58,7 @@ function FilmScreen({films} : FilmScreenProps) : JSX.Element {
       <div className="page-content">
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
-          <FilmsList films={films} genre={currentFilm?.genre} />
+          <FilmsList films={filteredFilms}/>
         </section>
         <footer className="page-footer">
           <div className="logo">

@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
-import Films from '../../types/films';
+import GenresList from '../../components/genres-list/genres-list';
+import Header from '../../components/header/header';
+import { useAppSelector } from '../../hooks/hooks';
+import { getFilteredFilms } from '../../store/selectors';
 
 type PromoFilm = {
   name: string;
@@ -10,37 +12,20 @@ type PromoFilm = {
 
 type AppProps = {
   promoFilm : PromoFilm,
-  films: Films,
 };
 
-function MainScreen({promoFilm, films} : AppProps) : JSX.Element{
+function MainScreen({promoFilm} : AppProps) : JSX.Element{
   const {name, genre, date} = promoFilm;
+  const {films} = useAppSelector((state) => state);
+  const filteredFilms = useAppSelector(getFilteredFilms);
+
   return (
     <section className="main-screen">
       <section className="film-card">
         <div className="film-card__bg">
           <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
         </div>
-        <h1 className="visually-hidden">WTW</h1>
-        <header className="page-header film-card__head">
-          <div className="logo">
-            <Link to='/' className="logo__link">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </Link>
-          </div>
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-              </div>
-            </li>
-            <li className="user-block__item">
-              <a className="user-block__link">Sign out</a>
-            </li>
-          </ul>
-        </header>
+        <Header />
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
@@ -74,39 +59,8 @@ function MainScreen({promoFilm, films} : AppProps) : JSX.Element{
       <div className="page-content">
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
-          <ul className="catalog__genres-list">
-            <li className="catalog__genres-item catalog__genres-item--active">
-              <a href="#" className="catalog__genres-link">All genres</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Comedies</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Crime</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Documentary</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Dramas</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Horror</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Kids & Family</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Romance</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Sci-Fi</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Thrillers</a>
-            </li>
-          </ul>
-          <FilmsList films={films} genre=''/>
+          <GenresList films={films}/>
+          <FilmsList films={filteredFilms}/>
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
           </div>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 const Video = {
-  DELAY: 2000,
+  DELAY: 1000,
   BEGIN: 0,
 };
 

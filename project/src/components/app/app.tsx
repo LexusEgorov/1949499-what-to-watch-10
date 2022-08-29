@@ -10,6 +10,8 @@ import AddRewiewScreen from '../../pages/add-review-screen/add-review-screen';
 import PlayerScreen from '../../pages/player-screen/player-screen';
 import PrivateRoute from '../private-route/private-route';
 import Films from '../../types/films';
+import { useAppDispatch } from '../../hooks/hooks';
+import { Action } from '../../store/action';
 
 type PromoFilm = {
   name: string;
@@ -23,13 +25,16 @@ type AppProps = {
 };
 
 function App({promoFilm, films} : AppProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  dispatch(Action.INIT());
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path={AppRoute.Root} element={<Layout />}>
-          <Route index element={<MainScreen promoFilm={promoFilm} films={films}/>} />
+          <Route index element={<MainScreen promoFilm={promoFilm}/>} />
           <Route path={AppRoute.SignIn} element={<SignInScreen />} />
-          <Route path={AppRoute.Film} element={<FilmScreen films={films}/>} />
+          <Route path={AppRoute.Film} element={<FilmScreen />} />
           <Route path={AppRoute.Player} element={<PlayerScreen films={films}/>} />
           <Route
             path={AppRoute.MyList}
