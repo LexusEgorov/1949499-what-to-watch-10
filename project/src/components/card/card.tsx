@@ -7,12 +7,18 @@ type CardProps = {
 };
 
 function Card({film} : CardProps):JSX.Element{
+  const {
+    videoLink,
+    previewImage,
+    id,
+    name,
+  } = film;
   return (
     <article className="small-film-card catalog__films-card">
-      <Videoplayer src={film.videoSrc} imgSrc='img/snatch.jpg'/>
+      <Videoplayer src={videoLink} imgSrc={previewImage}/>
       <h3 className="small-film-card__title">
-        <Link to={`/films/${film.id}`} className="small-film-card__link">
-          {film.name}
+        <Link to={`/films/${id}`} className="small-film-card__link">
+          {name}
         </Link>
       </h3>
     </article>

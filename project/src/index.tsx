@@ -2,25 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './components/app/app';
-
-import FISH_FILMS from './fish/films';
+import { Action } from './store/action';
+import { fetchFilmAction, fetchPromoFilmAction } from './store/api-actions';
 import { store } from './store/store';
 
-const promoFilm = {
-  name: 'The Grand Budapest Hotel',
-  date: 2014,
-  genre: 'Drama',
-};
+
+store.dispatch(Action.INIT());
+store.dispatch(fetchFilmAction());
+store.dispatch(fetchPromoFilmAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
-
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App promoFilm={promoFilm} films={FISH_FILMS}/>
+      <App/>
     </Provider>
   </React.StrictMode>
 );

@@ -14,7 +14,7 @@ function FilmScreen() : JSX.Element {
   const filteredFilms = useAppSelector(getFilteredFilms);
 
   useEffect(() => {
-    dispatch(Action.FILM.SET_CURRENT({currentFilm: filmId}));
+    dispatch(Action.FILMS.SET_CURRENT({currentFilm: filmId}));
   }, [dispatch, filmId]);
 
   return (
@@ -30,7 +30,7 @@ function FilmScreen() : JSX.Element {
               <h2 className="film-card__title">{currentFilm.name}</h2>
               <p className="film-card__meta">
                 <span className="film-card__genre">{currentFilm.genre}</span>
-                <span className="film-card__year">{currentFilm.year}</span>
+                <span className="film-card__year">{currentFilm.released}</span>
               </p>
               <div className="film-card__buttons">
                 <button className="btn btn--play film-card__button" type="button">

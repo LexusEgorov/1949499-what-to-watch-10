@@ -19,6 +19,11 @@ export enum FilmTabs {
   Reviews = 'REVIEWS',
 }
 
+export enum APIRoute {
+  Films = '/films',
+  Promo = '/promo',
+}
+
 export const DEFAULT_FILTER = 'All genres';
 
 export const SIMILAR_FILMS_COUNT = 4;

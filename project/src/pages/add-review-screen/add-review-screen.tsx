@@ -1,14 +1,10 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 import FormComment from '../../components/form-comment/form-comment';
-import Films from '../../types/films';
+import { useAppSelector } from '../../hooks/hooks';
 
-type AddReviewScreenProps = {
-  films: Films;
-};
-
-function AddRewiewScreen({films} : AddReviewScreenProps): JSX.Element {
+function AddRewiewScreen(): JSX.Element {
   const params = useParams();
+  const {films} = useAppSelector((state) => state);
   const currentFilm = films.find((film) => film.id === Number(params.id));
 
   return (
