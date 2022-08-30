@@ -1,14 +1,4 @@
-import { useParams } from 'react-router-dom';
-import Films from '../../types/films';
-
-type PlayerScreenProps = {
-  films: Films;
-};
-
-function PlayerScreen({films} : PlayerScreenProps): JSX.Element {
-  const params = useParams();
-  // eslint-disable-next-line no-console
-  console.log(params);
+function PlayerScreen(): JSX.Element {
   return (
     <div className="player">
       <video src="#" className="player__video" poster="img/player-poster.jpg"></video>

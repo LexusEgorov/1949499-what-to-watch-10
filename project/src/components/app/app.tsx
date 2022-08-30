@@ -9,40 +9,32 @@ import FilmScreen from '../../pages/film-screen/film-screen';
 import AddRewiewScreen from '../../pages/add-review-screen/add-review-screen';
 import PlayerScreen from '../../pages/player-screen/player-screen';
 import PrivateRoute from '../private-route/private-route';
-import Films from '../../types/films';
-import { useAppDispatch } from '../../hooks/hooks';
-import { Action } from '../../store/action';
+import { useAppSelector } from '../../hooks/hooks';
+import LoadingScreen from '../../pages/loading-screen/loading-screen';
 
-type PromoFilm = {
-  name: string;
-  genre: string;
-  date: number;
-};
-
-type AppProps = {
-  promoFilm : PromoFilm,
-  films: Films,
-};
-
-function App({promoFilm, films} : AppProps): JSX.Element {
-  const dispatch = useAppDispatch();
-  dispatch(Action.INIT());
+function App(): JSX.Element {
+  const {isFilmsLoaded, isPromoFilmLoaded} = useAppSelector((state) => state);
+  if(isFilmsLoaded || isPromoFilmLoaded){
+    // eslint-disable-next-line no-console
+    console.log('loading');
+    return <LoadingScreen />;
+  }
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path={AppRoute.Root} element={<Layout />}>
-          <Route index element={<MainScreen promoFilm={promoFilm}/>} />
+          <Route index element={<MainScreen />} />
           <Route path={AppRoute.SignIn} element={<SignInScreen />} />
           <Route path={AppRoute.Film} element={<FilmScreen />} />
-          <Route path={AppRoute.Player} element={<PlayerScreen films={films}/>} />
+          <Route path={AppRoute.Player} element={<PlayerScreen />} />
           <Route
             path={AppRoute.MyList}
             element={
               <PrivateRoute
                 authorizationStatus={AuthorizationStatus.NoAuth}
               >
-                <MyListScreen films={films}/>
+                <MyListScreen/>
               </PrivateRoute>
             }
           />
@@ -52,7 +44,7 @@ function App({promoFilm, films} : AppProps): JSX.Element {
               <PrivateRoute
                 authorizationStatus={AuthorizationStatus.NoAuth}
               >
-                <AddRewiewScreen films={films}/>
+                <AddRewiewScreen/>
               </PrivateRoute>
             }
           />

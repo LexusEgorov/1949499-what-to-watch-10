@@ -41,7 +41,7 @@ function DetailsTab({currentFilm} : TabProps) : JSX.Element {
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Released</strong>
-          <span className="film-card__details-value">{currentFilm?.year}</span>
+          <span className="film-card__details-value">{currentFilm?.released}</span>
         </p>
       </div>
     </div>

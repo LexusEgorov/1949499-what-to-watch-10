@@ -8,10 +8,10 @@ function OverviewTab({currentFilm} : TabProps) : JSX.Element {
   return (
     <>
       <div className="film-rating">
-        <div className="film-rating__score">{currentFilm?.ratingScore}</div>
+        <div className="film-rating__score">{currentFilm?.rating}</div>
         <p className="film-rating__meta">
-          <span className="film-rating__level">{currentFilm?.ratingLevel}</span>
-          <span className="film-rating__count">{currentFilm?.ratingCount} ratings</span>
+          <span className="film-rating__level">good</span>
+          <span className="film-rating__count">{currentFilm?.scoresCount} ratings</span>
         </p>
       </div>
       <div className="film-card__text">

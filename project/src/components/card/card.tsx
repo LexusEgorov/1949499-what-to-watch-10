@@ -1,6 +1,4 @@
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks/hooks';
-import { Action } from '../../store/action';
 import Film from '../../types/film';
 import Videoplayer from '../videoplayer/videoplayer';
 
@@ -9,17 +7,18 @@ type CardProps = {
 };
 
 function Card({film} : CardProps):JSX.Element{
-  const dispatch = useAppDispatch();
+  const {
+    videoLink,
+    previewImage,
+    id,
+    name,
+  } = film;
   return (
     <article className="small-film-card catalog__films-card">
-      <Videoplayer src={film.videoSrc} imgSrc='img/snatch.jpg'/>
+      <Videoplayer src={videoLink} imgSrc={previewImage}/>
       <h3 className="small-film-card__title">
-        <Link to={`/films/${film.id}`} className="small-film-card__link"
-          onClick={() => {
-            dispatch(Action.FILM.SET_CURRENT({currentFilm: film.id}));
-          }}
-        >
-          {film.name}
+        <Link to={`/films/${id}`} className="small-film-card__link">
+          {name}
         </Link>
       </h3>
     </article>

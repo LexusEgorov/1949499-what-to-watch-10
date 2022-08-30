@@ -1,16 +1,21 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
 import Header from '../../components/header/header';
 import Tabs from '../../components/tabs/tabs';
-import { useAppSelector } from '../../hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { Action } from '../../store/action';
 import { getFilteredFilms } from '../../store/selectors';
 
 function FilmScreen() : JSX.Element {
-  // eslint-disable-next-line no-console
-  console.log('film');
-
+  const dispatch = useAppDispatch();
+  const filmId = Number(useParams().id);
   const {currentFilm} = useAppSelector((state) => state);
   const filteredFilms = useAppSelector(getFilteredFilms);
+
+  useEffect(() => {
+    dispatch(Action.FILMS.SET_CURRENT({currentFilm: filmId}));
+  }, [dispatch, filmId]);
 
   return (
     <>
@@ -25,7 +30,7 @@ function FilmScreen() : JSX.Element {
               <h2 className="film-card__title">{currentFilm.name}</h2>
               <p className="film-card__meta">
                 <span className="film-card__genre">{currentFilm.genre}</span>
-                <span className="film-card__year">{currentFilm.year}</span>
+                <span className="film-card__year">{currentFilm.released}</span>
               </p>
               <div className="film-card__buttons">
                 <button className="btn btn--play film-card__button" type="button">

@@ -1,41 +1,51 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import Header from '../../components/header/header';
+import { DEFAULT_FILTER } from '../../const';
 import { useAppSelector } from '../../hooks/hooks';
+import { Action } from '../../store/action';
 import { getFilteredFilms } from '../../store/selectors';
 
-type PromoFilm = {
-  name: string;
-  genre: string;
-  date: number;
-};
 
-type AppProps = {
-  promoFilm : PromoFilm,
-};
+function MainScreen() : JSX.Element{
+  const dispatch = useDispatch();
+  const {promoFilm} = useAppSelector((state) => state);
 
-function MainScreen({promoFilm} : AppProps) : JSX.Element{
-  const {name, genre, date} = promoFilm;
+  const {
+    posterImage,
+    name,
+    backgroundImage,
+    genre,
+    released,
+  } = promoFilm;
+
   const {films} = useAppSelector((state) => state);
   const filteredFilms = useAppSelector(getFilteredFilms);
+
+  useEffect(() => {
+    dispatch(Action.GENRE.SET({genre: DEFAULT_FILTER}));
+    dispatch(Action.FILMS.SET_CURRENT({currentFilm: -1}));
+  }, [dispatch]);
 
   return (
     <section className="main-screen">
       <section className="film-card">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+          <img src={backgroundImage} alt={name} />
         </div>
         <Header />
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+              <img src={posterImage} alt={`${name} poster`} width="218" height="327" />
             </div>
             <div className="film-card__desc">
               <h2 className="film-card__title">{name}</h2>
               <p className="film-card__meta">
                 <span className="film-card__genre">{genre}</span>
-                <span className="film-card__year">{date}</span>
+                <span className="film-card__year">{released}</span>
               </p>
               <div className="film-card__buttons">
                 <button className="btn btn--play film-card__button" type="button">
