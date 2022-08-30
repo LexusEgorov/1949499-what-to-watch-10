@@ -39,6 +39,20 @@ export const fetchPromoFilmAction = createAsyncThunk<void, undefined, {
   }
 );
 
+export const fetchFavoriteAction = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatchType,
+  state: State,
+  extra: AxiosInstance,
+}>(
+  'films/load-favorite',
+  async (_arg, {dispatch, extra: api}) => {
+    dispatch(Action.APP.SET_FAVORITE_FILMS_LOADED_STATUS(true));
+    const {data} = await (await api.get<Films>(APIRoute.Favorite,));
+    dispatch(Action.FILMS.LOAD_FAVORITE(data));
+    dispatch(Action.APP.SET_FAVORITE_FILMS_LOADED_STATUS(false));
+  }
+);
+
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatchType,
   state: State,
@@ -65,7 +79,9 @@ export const loginAction = createAsyncThunk<number | void, AuthData, {
     try {
       const {data: {token}} = await api.post<UserData>(APIRoute.Login, {email, password});
       saveToken(token);
+
       dispatch(Action.APP.SET_AUTHORIZATION_STATUS(AuthorizationStatus.Auth));
+      dispatch(fetchFavoriteAction());
       dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.Root));
     } catch {
       return ERROR_CODE;
@@ -85,3 +101,5 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     dispatch(Action.APP.SET_AUTHORIZATION_STATUS(AuthorizationStatus.NoAuth));
   }
 );
+
+

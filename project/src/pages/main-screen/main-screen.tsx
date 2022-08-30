@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import Header from '../../components/header/header';
-import { DEFAULT_FILTER, FILMS_BLOCK } from '../../const';
+import { AuthorizationStatus, DEFAULT_FILTER, FILMS_BLOCK } from '../../const';
 import { useAppSelector } from '../../hooks/hooks';
 import { Action } from '../../store/action';
 import { getFilteredFilms } from '../../store/selectors';
@@ -12,7 +12,7 @@ function MainScreen() : JSX.Element{
   const dispatch = useDispatch();
   const [countFilms, setCountFilms] = useState(FILMS_BLOCK);
 
-  const {promoFilm} = useAppSelector((state) => state);
+  const {promoFilm, films, favoriteFilms, authorizationStatus} = useAppSelector((state) => state);
 
   const {
     posterImage,
@@ -22,7 +22,6 @@ function MainScreen() : JSX.Element{
     released,
   } = promoFilm;
 
-  const {films} = useAppSelector((state) => state);
   const filteredFilms = useAppSelector(getFilteredFilms);
   const slicedFilteredFilms = filteredFilms.slice(0, countFilms);
 
@@ -63,13 +62,18 @@ function MainScreen() : JSX.Element{
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                {
+                  authorizationStatus === AuthorizationStatus.Auth ?
+                    (
+                      <button className="btn btn--list film-card__button" type="button">
+                        <svg viewBox="0 0 19 20" width="19" height="20">
+                          <use xlinkHref="#add"></use>
+                        </svg>
+                        <span>My list</span>
+                        <span className="film-card__count">{favoriteFilms.length}</span>
+                      </button>
+                    ) : ''
+                }
               </div>
             </div>
           </div>

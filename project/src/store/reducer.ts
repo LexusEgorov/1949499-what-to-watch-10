@@ -2,6 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import { AuthorizationStatus } from '../const';
 import Film from '../types/film';
 import Films from '../types/films';
+import { UserData } from '../types/user-data';
 import { Action } from './action';
 
 type InitialState = {
@@ -9,9 +10,12 @@ type InitialState = {
   currentFilm: Film,
   promoFilm: Film,
   films: Films,
+  favoriteFilms: Films,
   isFilmsLoaded: boolean,
   isPromoFilmLoaded: boolean,
+  isFavoriteFilmsLoaded: boolean,
   authorizationStatus: string,
+  userData: UserData,
 }
 
 const initialState : InitialState = {
@@ -19,9 +23,12 @@ const initialState : InitialState = {
   currentFilm: {} as Film,
   promoFilm: {} as Film,
   films: [],
+  favoriteFilms: [],
   isFilmsLoaded: false,
   isPromoFilmLoaded: false,
+  isFavoriteFilmsLoaded: false,
   authorizationStatus: AuthorizationStatus.Unknown,
+  userData: {} as UserData,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -31,6 +38,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(Action.APP.SET_PROMO_FILM_LOADED_STATUS, (state, action) => {
       state.isPromoFilmLoaded = action.payload;
+    })
+    .addCase(Action.APP.SET_FAVORITE_FILMS_LOADED_STATUS, (state, action) => {
+      state.isFavoriteFilmsLoaded = action.payload;
     })
     .addCase(Action.APP.SET_AUTHORIZATION_STATUS, (state, action) => {
       state.authorizationStatus = action.payload;
@@ -47,6 +57,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(Action.FILMS.LOAD_PROMO, (state, action) => {
       state.promoFilm = action.payload;
+    })
+    .addCase(Action.FILMS.LOAD_FAVORITE, (state, action) => {
+      state.favoriteFilms = action.payload;
     });
 });
 
