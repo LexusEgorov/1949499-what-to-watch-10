@@ -13,8 +13,8 @@ export const fetchFilmAction = createAsyncThunk<void, undefined, {
 }>(
   'films/load',
   async (_arg, {dispatch, extra: api}) => {
-    const {data} = await api.get<Films>(APIRoute.Films);
     dispatch(Action.APP.SET_FILMS_LOADED_STATUS(true));
+    const {data} = await api.get<Films>(APIRoute.Films);
     dispatch(Action.FILMS.LOAD(data));
     dispatch(Action.APP.SET_FILMS_LOADED_STATUS(false));
   }
@@ -27,8 +27,8 @@ export const fetchPromoFilmAction = createAsyncThunk<void, undefined, {
 }>(
   'films/load-promo',
   async (_arg, {dispatch, extra: api}) => {
-    const {data} = await api.get<Film>(APIRoute.Promo);
     dispatch(Action.APP.SET_PROMO_FILM_LOADED_STATUS(true));
+    const {data} = await api.get<Film>(APIRoute.Promo);
     dispatch(Action.FILMS.LOAD_PROMO(data));
     dispatch(Action.APP.SET_PROMO_FILM_LOADED_STATUS(false));
   }

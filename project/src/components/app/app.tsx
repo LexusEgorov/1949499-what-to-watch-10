@@ -15,8 +15,6 @@ import LoadingScreen from '../../pages/loading-screen/loading-screen';
 function App(): JSX.Element {
   const {isFilmsLoaded, isPromoFilmLoaded} = useAppSelector((state) => state);
   if(isFilmsLoaded || isPromoFilmLoaded){
-    // eslint-disable-next-line no-console
-    console.log('loading');
     return <LoadingScreen />;
   }
 
