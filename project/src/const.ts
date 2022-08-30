@@ -22,6 +22,10 @@ export enum FilmTabs {
 export enum APIRoute {
   Films = '/films',
   Promo = '/promo',
+  Login = '/login',
+  Logout = '/logout',
+  Comments = '/comments',
+  Favorite = '/favorite',
 }
 
 export enum RatingLevel {

@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
+import { AuthorizationStatus } from '../const';
 import Film from '../types/film';
 import Films from '../types/films';
 import { Action } from './action';
@@ -10,27 +11,29 @@ type InitialState = {
   films: Films,
   isFilmsLoaded: boolean,
   isPromoFilmLoaded: boolean,
+  authorizationStatus: string,
 }
 
 const initialState : InitialState = {
-  currentGenre: '',
+  currentGenre: 'All genres',
   currentFilm: {} as Film,
   promoFilm: {} as Film,
   films: [],
   isFilmsLoaded: false,
   isPromoFilmLoaded: false,
+  authorizationStatus: AuthorizationStatus.Unknown,
 };
 
 const reducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(Action.INIT, (state) => {
-      state.currentGenre = 'All genres';
-    })
     .addCase(Action.APP.SET_FILMS_LOADED_STATUS, (state, action) => {
       state.isFilmsLoaded = action.payload;
     })
     .addCase(Action.APP.SET_PROMO_FILM_LOADED_STATUS, (state, action) => {
       state.isPromoFilmLoaded = action.payload;
+    })
+    .addCase(Action.APP.SET_AUTHORIZATION_STATUS, (state, action) => {
+      state.authorizationStatus = action.payload;
     })
     .addCase(Action.GENRE.SET, (state, action) => {
       state.currentGenre = action.payload.genre;

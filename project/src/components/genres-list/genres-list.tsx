@@ -4,6 +4,8 @@ import { Action } from '../../store/action';
 import Films from '../../types/films';
 import classNames from 'classnames';
 
+const GENRES_MAX_COUNT = 10;
+
 type GenresListProps = {
   films: Films;
 }
@@ -19,7 +21,7 @@ function GenresList({films} : GenresListProps) : JSX.Element {
   return (
     <ul className="catalog__genres-list">
       {
-        [...genres].map((genre) => (
+        [...genres].slice(0, GENRES_MAX_COUNT).map((genre) => (
           <li key={genre}
             className={
               classNames('catalog__genres-item', {
