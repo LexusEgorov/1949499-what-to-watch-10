@@ -26,7 +26,7 @@ a{
   margin-left: 20px;
   box-sizing: content-box;
   animation: spinner 2.5s linear infinite;
-  transform-origin: 50% 61%;
+  transform-origin: 49% 53%;
 }
 
 @keyframes spinner {
