@@ -22,8 +22,21 @@ export enum FilmTabs {
 export enum APIRoute {
   Films = '/films',
   Promo = '/promo',
+  Login = '/login',
+  Logout = '/logout',
+  Comments = '/comments',
+  Favorite = '/favorite',
+}
+
+export enum RatingLevel {
+  Bad = 2,
+  Normal = 4,
+  Good = 7,
+  VeryGood = 8,
 }
 
 export const DEFAULT_FILTER = 'All genres';
 
 export const SIMILAR_FILMS_COUNT = 4;
+
+export const FILMS_BLOCK = 8;

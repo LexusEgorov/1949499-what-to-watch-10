@@ -6,7 +6,7 @@ import OverviewTab from './overview-tab';
 import ReviewsTab from './reviews-tab';
 
 type TabsProps = {
-  currentFilm: Film | undefined;
+  currentFilm: Film;
 };
 
 function Tabs ({currentFilm} : TabsProps) : JSX.Element {

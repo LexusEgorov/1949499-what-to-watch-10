@@ -6,6 +6,7 @@ import Tabs from '../../components/tabs/tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { Action } from '../../store/action';
 import { getFilteredFilms } from '../../store/selectors';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 function FilmScreen() : JSX.Element {
   const dispatch = useAppDispatch();
@@ -13,24 +14,41 @@ function FilmScreen() : JSX.Element {
   const {currentFilm} = useAppSelector((state) => state);
   const filteredFilms = useAppSelector(getFilteredFilms);
 
+  const {
+    name,
+    genre,
+    released,
+    backgroundImage,
+    backgroundColor,
+    posterImage,
+  } = currentFilm;
+
   useEffect(() => {
     dispatch(Action.FILMS.SET_CURRENT({currentFilm: filmId}));
   }, [dispatch, filmId]);
 
+  if(!currentFilm.id){
+    return <LoadingScreen />;
+  }
+
   return (
     <>
-      <section className="film-card film-card--full">
+      <section className="film-card film-card--full"
+        style={{
+          background: backgroundColor
+        }}
+      >
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+            <img src={backgroundImage} alt={name} />
           </div>
           <Header />
           <div className="film-card__wrap">
             <div className="film-card__desc">
-              <h2 className="film-card__title">{currentFilm.name}</h2>
+              <h2 className="film-card__title">{name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{currentFilm.genre}</span>
-                <span className="film-card__year">{currentFilm.released}</span>
+                <span className="film-card__genre">{genre}</span>
+                <span className="film-card__year">{released}</span>
               </p>
               <div className="film-card__buttons">
                 <button className="btn btn--play film-card__button" type="button">
@@ -54,7 +72,7 @@ function FilmScreen() : JSX.Element {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+              <img src={posterImage} alt={`${name} poster`} width="218" height="327" />
             </div>
             <Tabs currentFilm={currentFilm}/>
           </div>

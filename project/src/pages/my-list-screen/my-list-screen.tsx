@@ -1,4 +1,4 @@
-import MyFilm from '../../components/my-film/my-film';
+import Card from '../../components/card/card';
 import { useAppSelector } from '../../hooks/hooks';
 
 function MyListScreen() : JSX.Element {
@@ -30,7 +30,7 @@ function MyListScreen() : JSX.Element {
         <h2 className="catalog__title visually-hidden">Catalog</h2>
         <div className="catalog__films-list">
           {
-            films.map((film) => <MyFilm film={film} key={film.id}/>)
+            films.map((film) => <Card film={film} key={film.id}/>)
           }
         </div>
       </section>

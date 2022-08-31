@@ -1,24 +1,56 @@
+import { RatingLevel } from '../../const';
 import Film from '../../types/film';
 
+const STARRING_COUNT = 4;
+
 type TabProps = {
-  currentFilm: Film | undefined;
+  currentFilm: Film;
 }
 
+const getRatingLevel = (rating : number) : string => {
+  if(rating <= RatingLevel.Bad){
+    return 'Bad';
+  }
+
+  if(rating <= RatingLevel.Normal){
+    return 'Normal';
+  }
+
+  if(rating <= RatingLevel.Good){
+    return 'Good';
+  }
+
+  if(rating <= RatingLevel.VeryGood){
+    return 'Very good';
+  }
+
+  return 'Awesome';
+};
+
 function OverviewTab({currentFilm} : TabProps) : JSX.Element {
+  const {
+    rating,
+    scoresCount,
+    description,
+    director,
+    starring,
+  } = currentFilm;
+
+  const ratingLevel = getRatingLevel(rating);
+
   return (
     <>
       <div className="film-rating">
-        <div className="film-rating__score">{currentFilm?.rating}</div>
+        <div className="film-rating__score">{rating}</div>
         <p className="film-rating__meta">
-          <span className="film-rating__level">good</span>
-          <span className="film-rating__count">{currentFilm?.scoresCount} ratings</span>
+          <span className="film-rating__level">{ratingLevel}</span>
+          <span className="film-rating__count">{scoresCount} ratings</span>
         </p>
       </div>
       <div className="film-card__text">
-        <p>In the 1930s, the Grand Budapest Hotel is a popular European ski resort, presided over by concierge Gustave H. (Ralph Fiennes). Zero, a junior lobby boy, becomes Gustave&apos;s friend and protege.</p>
-        <p>Gustave prides himself on providing first-class service to the hotel&apos;s guests, including satisfying the sexual needs of the many elderly women who stay there. When one of Gustave&apos;s lovers dies mysteriously, Gustave finds himself the recipient of a priceless painting and the chief suspect in her murder.</p>
-        <p className="film-card__director"><strong>Director: {currentFilm?.director}</strong></p>
-        <p className="film-card__starring"><strong>Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe and other</strong></p>
+        <p>{description}</p>
+        <p className="film-card__director"><strong>Director: {director}</strong></p>
+        <p className="film-card__starring"><strong>Starring: {starring.slice(0, STARRING_COUNT).join(', ')} and other</strong></p>
       </div>
     </>
   );

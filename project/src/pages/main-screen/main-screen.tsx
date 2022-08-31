@@ -1,17 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import Header from '../../components/header/header';
-import { DEFAULT_FILTER } from '../../const';
+import { AuthorizationStatus, DEFAULT_FILTER, FILMS_BLOCK } from '../../const';
 import { useAppSelector } from '../../hooks/hooks';
 import { Action } from '../../store/action';
 import { getFilteredFilms } from '../../store/selectors';
 
-
 function MainScreen() : JSX.Element{
   const dispatch = useDispatch();
-  const {promoFilm} = useAppSelector((state) => state);
+  const [countFilms, setCountFilms] = useState(FILMS_BLOCK);
+
+  const {promoFilm, films, favoriteFilms, authorizationStatus} = useAppSelector((state) => state);
 
   const {
     posterImage,
@@ -21,13 +22,20 @@ function MainScreen() : JSX.Element{
     released,
   } = promoFilm;
 
-  const {films} = useAppSelector((state) => state);
   const filteredFilms = useAppSelector(getFilteredFilms);
+  const slicedFilteredFilms = filteredFilms.slice(0, countFilms);
+
+  const [isMoreFilms, setIsMoreFilms] = useState(slicedFilteredFilms.length < filteredFilms.length);
 
   useEffect(() => {
     dispatch(Action.GENRE.SET({genre: DEFAULT_FILTER}));
     dispatch(Action.FILMS.SET_CURRENT({currentFilm: -1}));
   }, [dispatch]);
+
+  useEffect(() => {
+    setCountFilms(FILMS_BLOCK);
+    setIsMoreFilms(FILMS_BLOCK < filteredFilms.length);
+  }, [filteredFilms]);
 
   return (
     <section className="main-screen">
@@ -54,13 +62,18 @@ function MainScreen() : JSX.Element{
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                {
+                  authorizationStatus === AuthorizationStatus.Auth ?
+                    (
+                      <button className="btn btn--list film-card__button" type="button">
+                        <svg viewBox="0 0 19 20" width="19" height="20">
+                          <use xlinkHref="#add"></use>
+                        </svg>
+                        <span>My list</span>
+                        <span className="film-card__count">{favoriteFilms.length}</span>
+                      </button>
+                    ) : ''
+                }
               </div>
             </div>
           </div>
@@ -70,10 +83,24 @@ function MainScreen() : JSX.Element{
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
           <GenresList films={films}/>
-          <FilmsList films={filteredFilms}/>
-          <div className="catalog__more">
-            <button className="catalog__button" type="button">Show more</button>
-          </div>
+          <FilmsList films={slicedFilteredFilms}/>
+          {
+            isMoreFilms ?
+              (
+                <div className="catalog__more">
+                  <button className="catalog__button" type="button"
+                    onClick={() => {
+                      setCountFilms(countFilms + FILMS_BLOCK);
+                      if(countFilms + FILMS_BLOCK >= filteredFilms.length){
+                        setIsMoreFilms(false);
+                      }
+                    }}
+                  >
+                    Show more
+                  </button>
+                </div>
+              ) : ''
+          }
         </section>
         <footer className="page-footer">
           <div className="logo">
