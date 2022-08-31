@@ -35,6 +35,21 @@ export enum RatingLevel {
   VeryGood = 8,
 }
 
+export const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
 export const DEFAULT_FILTER = 'All genres';
 
 export const SIMILAR_FILMS_COUNT = 4;

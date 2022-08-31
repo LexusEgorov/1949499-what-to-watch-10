@@ -3,9 +3,9 @@ import Films from '../types/films';
 import { State } from '../types/types';
 
 export const getFilteredFilms = (state: State) : Films => {
-  const {films, currentGenre, currentFilm} = state;
+  const {films, currentGenre, currentFilm, currentFilmSimilar} = state;
   if(currentFilm.id){
-    return films.filter((film) => film.genre === currentFilm.genre && film !== currentFilm).slice(0, SIMILAR_FILMS_COUNT);
+    return currentFilmSimilar.filter((film) => film.id !== currentFilm.id).slice(0, SIMILAR_FILMS_COUNT);
   }
 
   if(currentGenre === DEFAULT_FILTER){

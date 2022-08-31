@@ -3,6 +3,7 @@ import { AxiosInstance } from 'axios';
 import { APIRoute, AppRoute, AuthorizationStatus } from '../const';
 import { dropToken, saveToken } from '../services/token';
 import { AuthData } from '../types/auth-data';
+import { Comments } from '../types/comments';
 import Film from '../types/film';
 import Films from '../types/films';
 import { AppDispatchType, State } from '../types/types';
@@ -11,7 +12,7 @@ import { Action } from './action';
 
 const ERROR_CODE = -1;
 
-export const fetchFilmAction = createAsyncThunk<void, undefined, {
+export const fetchFilmsAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatchType,
   state: State,
   extra: AxiosInstance,
@@ -22,6 +23,30 @@ export const fetchFilmAction = createAsyncThunk<void, undefined, {
     const {data} = await api.get<Films>(APIRoute.Films);
     dispatch(Action.FILMS.LOAD(data));
     dispatch(Action.APP.SET_FILMS_LOADED_STATUS(false));
+  }
+);
+
+export const fetchFilmAction = createAsyncThunk<void, number, {
+  dispatch: AppDispatchType,
+  state: State,
+  extra: AxiosInstance,
+}>(
+  'film/load',
+  async (id, {dispatch, extra: api}) => {
+    const {data} = await api.get<Film>(`${APIRoute.Films}/${id}`);
+    dispatch(Action.FILMS.SET_CURRENT({currentFilm: data}));
+  }
+);
+
+export const fetchFilmCommentsAction = createAsyncThunk<void, number, {
+  dispatch: AppDispatchType,
+  state: State,
+  extra: AxiosInstance,
+}>(
+  'film/load',
+  async (id, {dispatch, extra: api}) => {
+    const {data} = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
+    dispatch(Action.FILMS.SET_CURRENT_COMMENTS({currentFilmComments: data}));
   }
 );
 
@@ -53,6 +78,18 @@ export const fetchFavoriteAction = createAsyncThunk<void, undefined, {
   }
 );
 
+export const fetchSimilarAction = createAsyncThunk<void, number, {
+  dispatch: AppDispatchType,
+  state: State,
+  extra: AxiosInstance,
+}>(
+  'film/load-similar',
+  async (id, {dispatch, extra: api}) => {
+    const {data} = await api.get<Films>(`${APIRoute.Films}/${id}/similar`);
+    dispatch(Action.FILMS.LOAD_SIMILAR(data));
+  }
+);
+
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatchType,
   state: State,
@@ -61,7 +98,8 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
   'app/set-authorization-status',
   async(_arg, {dispatch, extra: api}) => {
     try{
-      await api.get(APIRoute.Login);
+      const {data} = await api.get<UserData>(APIRoute.Login);
+      dispatch(Action.APP.SET_USER(data));
       dispatch(Action.APP.SET_AUTHORIZATION_STATUS(AuthorizationStatus.Auth));
     } catch {
       dispatch(Action.APP.SET_AUTHORIZATION_STATUS(AuthorizationStatus.NoAuth));
@@ -77,10 +115,11 @@ export const loginAction = createAsyncThunk<number | void, AuthData, {
   'app/set-authorization-status',
   async ({login: email, password}, {dispatch, extra: api}) => {
     try {
-      const {data: {token}} = await api.post<UserData>(APIRoute.Login, {email, password});
-      saveToken(token);
+      const {data} = await api.post<UserData>(APIRoute.Login, {email, password});
+      saveToken(data.token);
 
       dispatch(Action.APP.SET_AUTHORIZATION_STATUS(AuthorizationStatus.Auth));
+      dispatch(Action.APP.SET_USER(data));
       dispatch(fetchFavoriteAction());
       dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.Root));
     } catch {

@@ -4,7 +4,7 @@ import FilmsList from '../../components/films-list/films-list';
 import Header from '../../components/header/header';
 import Tabs from '../../components/tabs/tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { Action } from '../../store/action';
+import { fetchFilmAction, fetchFilmCommentsAction, fetchSimilarAction } from '../../store/api-actions';
 import { getFilteredFilms } from '../../store/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 
@@ -24,7 +24,9 @@ function FilmScreen() : JSX.Element {
   } = currentFilm;
 
   useEffect(() => {
-    dispatch(Action.FILMS.SET_CURRENT({currentFilm: filmId}));
+    dispatch(fetchFilmAction(filmId));
+    dispatch(fetchSimilarAction(filmId));
+    dispatch(fetchFilmCommentsAction(filmId));
   }, [dispatch, filmId]);
 
   if(!currentFilm.id){

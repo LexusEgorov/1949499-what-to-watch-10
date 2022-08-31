@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { AuthorizationStatus } from '../const';
+import { Comments } from '../types/comments';
 import Film from '../types/film';
 import Films from '../types/films';
 import { UserData } from '../types/user-data';
@@ -16,6 +17,8 @@ type InitialState = {
   isFavoriteFilmsLoaded: boolean,
   authorizationStatus: string,
   userData: UserData,
+  currentFilmComments: Comments,
+  currentFilmSimilar: Films,
 }
 
 const initialState : InitialState = {
@@ -29,6 +32,8 @@ const initialState : InitialState = {
   isFavoriteFilmsLoaded: false,
   authorizationStatus: AuthorizationStatus.Unknown,
   userData: {} as UserData,
+  currentFilmComments: [],
+  currentFilmSimilar: [],
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -45,12 +50,20 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(Action.APP.SET_AUTHORIZATION_STATUS, (state, action) => {
       state.authorizationStatus = action.payload;
     })
+    .addCase(Action.APP.SET_USER, (state, action) => {
+      state.userData = action.payload;
+    })
     .addCase(Action.GENRE.SET, (state, action) => {
       state.currentGenre = action.payload.genre;
     })
     .addCase(Action.FILMS.SET_CURRENT, (state, action) => {
-      const findedFilm = state.films.find((film) => film.id === action.payload.currentFilm);
-      state.currentFilm = findedFilm ? findedFilm : {} as Film;
+      state.currentFilm = action.payload.currentFilm;
+    })
+    .addCase(Action.FILMS.SET_CURRENT_COMMENTS, (state, action) => {
+      state.currentFilmComments = action.payload.currentFilmComments;
+    })
+    .addCase(Action.FILMS.LOAD_SIMILAR, (state, action) => {
+      state.currentFilmSimilar = action.payload;
     })
     .addCase(Action.FILMS.LOAD, (state, action) => {
       state.films = action.payload;

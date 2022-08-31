@@ -5,7 +5,7 @@ import { logoutAction } from '../../store/api-actions';
 
 function Header() : JSX.Element {
   const dispatch = useAppDispatch();
-  const {authorizationStatus} = useAppSelector((state) => state);
+  const {authorizationStatus, userData} = useAppSelector((state) => state);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   return(
@@ -25,7 +25,7 @@ function Header() : JSX.Element {
               (
                 <li className="user-block__item">
                   <div className="user-block__avatar">
-                    <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
+                    <img src={userData.avatarUrl} alt="User avatar" width="63" height="63" />
                   </div>
                 </li>
               ) : ''

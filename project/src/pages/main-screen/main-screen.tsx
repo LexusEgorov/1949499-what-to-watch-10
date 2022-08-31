@@ -7,6 +7,7 @@ import { AuthorizationStatus, DEFAULT_FILTER, FILMS_BLOCK } from '../../const';
 import { useAppSelector } from '../../hooks/hooks';
 import { Action } from '../../store/action';
 import { getFilteredFilms } from '../../store/selectors';
+import Film from '../../types/film';
 
 function MainScreen() : JSX.Element{
   const dispatch = useDispatch();
@@ -29,7 +30,8 @@ function MainScreen() : JSX.Element{
 
   useEffect(() => {
     dispatch(Action.GENRE.SET({genre: DEFAULT_FILTER}));
-    dispatch(Action.FILMS.SET_CURRENT({currentFilm: -1}));
+    dispatch(Action.FILMS.SET_CURRENT({currentFilm: {} as Film}));
+    dispatch(Action.FILMS.SET_CURRENT_COMMENTS({currentFilmComments: []}));
   }, [dispatch]);
 
   useEffect(() => {
