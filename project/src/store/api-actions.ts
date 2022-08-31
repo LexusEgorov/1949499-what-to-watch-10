@@ -3,9 +3,11 @@ import { AxiosInstance } from 'axios';
 import { APIRoute, AppRoute, AuthorizationStatus } from '../const';
 import { dropToken, saveToken } from '../services/token';
 import { AuthData } from '../types/auth-data';
+import { CommentData } from '../types/comment-data';
 import { Comments } from '../types/comments';
 import Film from '../types/film';
 import Films from '../types/films';
+import { StatusData } from '../types/status-data';
 import { AppDispatchType, State } from '../types/types';
 import { UserData } from '../types/user-data';
 import { Action } from './action';
@@ -90,6 +92,25 @@ export const fetchSimilarAction = createAsyncThunk<void, number, {
   }
 );
 
+export const changeFilmStatus = createAsyncThunk<void, StatusData, {
+  dispatch: AppDispatchType,
+  state: State,
+  extra: AxiosInstance,
+}>(
+  'film/changeStatus',
+  async ({filmId, filmStatus}, {dispatch, extra: api}) => {
+    try{
+      const status = filmStatus ? 1 : 0;
+      await api.post<Film>(`${APIRoute.Favorite}/${filmId}/${status}`);
+      dispatch(fetchFavoriteAction());
+      dispatch(fetchFilmsAction());
+      dispatch(fetchPromoFilmAction());
+    } catch {
+      throw new Error();
+    }
+  }
+);
+
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatchType,
   state: State,
@@ -100,6 +121,7 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
     try{
       const {data} = await api.get<UserData>(APIRoute.Login);
       dispatch(Action.APP.SET_USER(data));
+      dispatch(fetchFavoriteAction());
       dispatch(Action.APP.SET_AUTHORIZATION_STATUS(AuthorizationStatus.Auth));
     } catch {
       dispatch(Action.APP.SET_AUTHORIZATION_STATUS(AuthorizationStatus.NoAuth));
@@ -138,6 +160,18 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     await api.delete(APIRoute.Logout);
     dropToken();
     dispatch(Action.APP.SET_AUTHORIZATION_STATUS(AuthorizationStatus.NoAuth));
+  }
+);
+
+export const sendCommentAction = createAsyncThunk<void, CommentData, {
+  dispatch: AppDispatchType,
+  state: State,
+  extra: AxiosInstance,
+}>(
+  'films/send-comment',
+  async ({comment, rating, filmId}, {dispatch, extra: api}) => {
+    await api.post(`${APIRoute.Comments}/${filmId}`, ({comment, rating}));
+    dispatch(Action.APP.REDIRECT_TO_ROUTE(`${AppRoute.Films}/${filmId}` as AppRoute));
   }
 );
 

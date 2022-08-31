@@ -23,11 +23,11 @@ function Header() : JSX.Element {
           {
             isAuthorized ?
               (
-                <li className="user-block__item">
+                <Link to={AppRoute.MyList} className="user-block__item">
                   <div className="user-block__avatar">
                     <img src={userData.avatarUrl} alt="User avatar" width="63" height="63" />
                   </div>
-                </li>
+                </Link>
               ) : ''
           }
           <li className="user-block__item">
