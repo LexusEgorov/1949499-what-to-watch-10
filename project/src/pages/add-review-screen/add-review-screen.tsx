@@ -1,31 +1,47 @@
-import { useParams } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import FormComment from '../../components/form-comment/form-comment';
-import { useAppSelector } from '../../hooks/hooks';
+import { AppRoute } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { logoutAction } from '../../store/api-actions';
 
-function AddRewiewScreen(): JSX.Element {
-  const params = useParams();
-  const {films} = useAppSelector((state) => state);
-  const currentFilm = films.find((film) => film.id === Number(params.id));
+function AddReviewScreen(): JSX.Element {
+  const {currentFilm, userData} = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
+  const{
+    id,
+    name,
+    backgroundImage,
+    backgroundColor,
+    posterImage,
+  } = currentFilm;
+
+  if(!currentFilm.id){
+    return <Navigate to={'/404'} />;
+  }
 
   return (
-    <section className="film-card film-card--full">
+    <section className="film-card film-card--full"
+      style={{
+        background: backgroundColor
+      }}
+    >
       <div className="film-card__header">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+          <img src={backgroundImage} alt={name} />
         </div>
         <h1 className="visually-hidden">WTW</h1>
         <header className="page-header">
           <div className="logo">
-            <a href="main.html" className="logo__link">
+            <Link to='/' className="logo__link">
               <span className="logo__letter logo__letter--1">W</span>
               <span className="logo__letter logo__letter--2">T</span>
               <span className="logo__letter logo__letter--3">W</span>
-            </a>
+            </Link>
           </div>
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
-                <a href="film-page.html" className="breadcrumbs__link">{currentFilm?.name}</a>
+                <Link to={`/films/${id}`} className="breadcrumbs__link">{name}</Link>
               </li>
               <li className="breadcrumbs__item">
                 <a className="breadcrumbs__link">Add review</a>
@@ -33,18 +49,25 @@ function AddRewiewScreen(): JSX.Element {
             </ul>
           </nav>
           <ul className="user-block">
-            <li className="user-block__item">
+            <Link to={AppRoute.MyList} className="user-block__item">
               <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
+                <img src={userData.avatarUrl} alt="User avatar" width="63" height="63" />
               </div>
-            </li>
+            </Link>
             <li className="user-block__item">
-              <a className="user-block__link">Sign out</a>
+              <a className="user-block__link"
+                onClick={(evt) => {
+                  evt.preventDefault();
+                  dispatch(logoutAction());
+                }}
+              >
+                Sign out
+              </a>
             </li>
           </ul>
         </header>
         <div className="film-card__poster film-card__poster--small">
-          <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+          <img src={posterImage} alt={`${name} poster`} width="218" height="327" />
         </div>
       </div>
       <FormComment />
@@ -52,4 +75,4 @@ function AddRewiewScreen(): JSX.Element {
   );
 }
 
-export default AddRewiewScreen;
+export default AddReviewScreen;

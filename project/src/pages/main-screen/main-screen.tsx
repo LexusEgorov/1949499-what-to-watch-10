@@ -1,15 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import {Link} from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import Header from '../../components/header/header';
 import { AuthorizationStatus, DEFAULT_FILTER, FILMS_BLOCK } from '../../const';
-import { useAppSelector } from '../../hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { Action } from '../../store/action';
+import { changeFilmStatus } from '../../store/api-actions';
 import { getFilteredFilms } from '../../store/selectors';
+import Film from '../../types/film';
 
 function MainScreen() : JSX.Element{
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
+  const changeFilmStatusHandler = () => {
+    dispatch(changeFilmStatus({filmId: promoFilm.id, filmStatus: !promoFilm.isFavorite}));
+  };
+
+
   const [countFilms, setCountFilms] = useState(FILMS_BLOCK);
 
   const {promoFilm, films, favoriteFilms, authorizationStatus} = useAppSelector((state) => state);
@@ -29,7 +37,8 @@ function MainScreen() : JSX.Element{
 
   useEffect(() => {
     dispatch(Action.GENRE.SET({genre: DEFAULT_FILTER}));
-    dispatch(Action.FILMS.SET_CURRENT({currentFilm: -1}));
+    dispatch(Action.FILMS.SET_CURRENT({currentFilm: {} as Film}));
+    dispatch(Action.FILMS.SET_CURRENT_COMMENTS({currentFilmComments: []}));
   }, [dispatch]);
 
   useEffect(() => {
@@ -56,20 +65,32 @@ function MainScreen() : JSX.Element{
                 <span className="film-card__year">{released}</span>
               </p>
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <Link to={`/player/${promoFilm.id}`} className="btn btn--play film-card__button" type="button">
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
-                </button>
+                </Link>
                 {
                   authorizationStatus === AuthorizationStatus.Auth ?
                     (
-                      <button className="btn btn--list film-card__button" type="button">
-                        <svg viewBox="0 0 19 20" width="19" height="20">
-                          <use xlinkHref="#add"></use>
-                        </svg>
-                        <span>My list</span>
+                      <button className="btn btn--list film-card__button" type="button"
+                        onClick={changeFilmStatusHandler}
+                      >
+                        {
+                          !promoFilm.isFavorite ?
+                            (
+                              <>
+                                <svg viewBox="0 0 19 20" width="19" height="20">
+                                  <use xlinkHref="#add"></use>
+                                </svg>
+                                <span>My list</span>
+                              </>
+                            ) :
+                            (
+                              <span>✓ My list</span>
+                            )
+                        }
                         <span className="film-card__count">{favoriteFilms.length}</span>
                       </button>
                     ) : ''

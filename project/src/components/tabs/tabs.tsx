@@ -19,7 +19,7 @@ function Tabs ({currentFilm} : TabsProps) : JSX.Element {
       renderedTab = <DetailsTab currentFilm={currentFilm}/>;
       break;
     case FilmTabs.Reviews:
-      renderedTab = <ReviewsTab currentFilm={currentFilm}/>;
+      renderedTab = <ReviewsTab/>;
       break;
     default:
       renderedTab = <OverviewTab currentFilm={currentFilm}/>;
