@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {StatusCodes} from 'http-status-codes';
 import { getToken } from './token';

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { Action } from '../../store/action';
 import Films from '../../types/films';
