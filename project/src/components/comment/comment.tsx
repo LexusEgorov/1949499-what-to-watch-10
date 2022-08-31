@@ -21,7 +21,7 @@ function Comment({commentary} : CommentProps) : JSX.Element {
           <time className="review__date" dateTime={date}>{`${MONTHS[month]} ${day}, ${year}`}</time>
         </footer>
       </blockquote>
-      <div className="review__rating">{rating}</div>
+      <div className="review__rating">{rating.toFixed(1)}</div>
     </div>
   );
 }

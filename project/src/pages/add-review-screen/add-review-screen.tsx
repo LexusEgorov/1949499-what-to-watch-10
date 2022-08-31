@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import FormComment from '../../components/form-comment/form-comment';
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
@@ -14,6 +14,10 @@ function AddReviewScreen(): JSX.Element {
     backgroundColor,
     posterImage,
   } = currentFilm;
+
+  if(!currentFilm.id){
+    return <Navigate to={'/404'} />;
+  }
 
   return (
     <section className="film-card film-card--full"

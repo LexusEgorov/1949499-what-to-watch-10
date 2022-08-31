@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { APIRoute, AppRoute, AuthorizationStatus } from '../const';
@@ -21,10 +22,15 @@ export const fetchFilmsAction = createAsyncThunk<void, undefined, {
 }>(
   'films/load',
   async (_arg, {dispatch, extra: api}) => {
-    dispatch(Action.APP.SET_FILMS_LOADED_STATUS(true));
-    const {data} = await api.get<Films>(APIRoute.Films);
-    dispatch(Action.FILMS.LOAD(data));
-    dispatch(Action.APP.SET_FILMS_LOADED_STATUS(false));
+    try{
+      dispatch(Action.APP.SET_FILMS_LOADED_STATUS(true));
+      const {data} = await api.get<Films>(APIRoute.Films);
+      dispatch(Action.FILMS.LOAD(data));
+      dispatch(Action.APP.SET_FILMS_LOADED_STATUS(false));
+    } catch {
+      dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.Error));
+      dispatch(Action.APP.SET_FILMS_LOADED_STATUS(false));
+    }
   }
 );
 
@@ -35,8 +41,12 @@ export const fetchFilmAction = createAsyncThunk<void, number, {
 }>(
   'film/load',
   async (id, {dispatch, extra: api}) => {
-    const {data} = await api.get<Film>(`${APIRoute.Films}/${id}`);
-    dispatch(Action.FILMS.SET_CURRENT({currentFilm: data}));
+    try{
+      const {data} = await api.get<Film>(`${APIRoute.Films}/${id}`);
+      dispatch(Action.FILMS.SET_CURRENT({currentFilm: data}));
+    } catch {
+      dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.NotFound));
+    }
   }
 );
 
@@ -47,8 +57,12 @@ export const fetchFilmCommentsAction = createAsyncThunk<void, number, {
 }>(
   'film/load',
   async (id, {dispatch, extra: api}) => {
-    const {data} = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
-    dispatch(Action.FILMS.SET_CURRENT_COMMENTS({currentFilmComments: data}));
+    try{
+      const {data} = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
+      dispatch(Action.FILMS.SET_CURRENT_COMMENTS({currentFilmComments: data}));
+    } catch {
+      dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.Error));
+    }
   }
 );
 
@@ -59,10 +73,15 @@ export const fetchPromoFilmAction = createAsyncThunk<void, undefined, {
 }>(
   'films/load-promo',
   async (_arg, {dispatch, extra: api}) => {
-    dispatch(Action.APP.SET_PROMO_FILM_LOADED_STATUS(true));
-    const {data} = await api.get<Film>(APIRoute.Promo);
-    dispatch(Action.FILMS.LOAD_PROMO(data));
-    dispatch(Action.APP.SET_PROMO_FILM_LOADED_STATUS(false));
+    try{
+      dispatch(Action.APP.SET_PROMO_FILM_LOADED_STATUS(true));
+      const {data} = await api.get<Film>(APIRoute.Promo);
+      dispatch(Action.FILMS.LOAD_PROMO(data));
+      dispatch(Action.APP.SET_PROMO_FILM_LOADED_STATUS(false));
+    } catch {
+      dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.Error));
+      dispatch(Action.APP.SET_PROMO_FILM_LOADED_STATUS(false));
+    }
   }
 );
 
@@ -73,10 +92,15 @@ export const fetchFavoriteAction = createAsyncThunk<void, undefined, {
 }>(
   'films/load-favorite',
   async (_arg, {dispatch, extra: api}) => {
-    dispatch(Action.APP.SET_FAVORITE_FILMS_LOADED_STATUS(true));
-    const {data} = await (await api.get<Films>(APIRoute.Favorite,));
-    dispatch(Action.FILMS.LOAD_FAVORITE(data));
-    dispatch(Action.APP.SET_FAVORITE_FILMS_LOADED_STATUS(false));
+    try {
+      dispatch(Action.APP.SET_FAVORITE_FILMS_LOADED_STATUS(true));
+      const {data} = await (await api.get<Films>(APIRoute.Favorite,));
+      dispatch(Action.FILMS.LOAD_FAVORITE(data));
+      dispatch(Action.APP.SET_FAVORITE_FILMS_LOADED_STATUS(false));
+    } catch {
+      dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.Error));
+      dispatch(Action.APP.SET_FAVORITE_FILMS_LOADED_STATUS(false));
+    }
   }
 );
 
@@ -106,7 +130,7 @@ export const changeFilmStatus = createAsyncThunk<void, StatusData, {
       dispatch(fetchFilmsAction());
       dispatch(fetchPromoFilmAction());
     } catch {
-      throw new Error();
+      dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.Error));
     }
   }
 );
@@ -170,8 +194,12 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
 }>(
   'films/send-comment',
   async ({comment, rating, filmId}, {dispatch, extra: api}) => {
-    await api.post(`${APIRoute.Comments}/${filmId}`, ({comment, rating}));
-    dispatch(Action.APP.REDIRECT_TO_ROUTE(`${AppRoute.Films}/${filmId}` as AppRoute));
+    try {
+      await api.post(`${APIRoute.Comments}/${filmId}`, ({comment, rating}));
+      dispatch(Action.APP.REDIRECT_TO_ROUTE(`${AppRoute.Films}/${filmId}` as AppRoute));
+    } catch {
+      dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.Error));
+    }
   }
 );
 

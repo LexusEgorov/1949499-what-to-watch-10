@@ -13,6 +13,7 @@ import { useAppSelector } from '../../hooks/hooks';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import HistoryRouter from '../history-route/history-route';
 import browserHistory from '../../browser-history';
+import ServerErrorScreen from '../../pages/server-error-screen/server-error-screen';
 
 function App(): JSX.Element {
   const {isFilmsLoaded, isPromoFilmLoaded} = useAppSelector((state) => state);
@@ -25,6 +26,7 @@ function App(): JSX.Element {
       <Routes>
         <Route path={AppRoute.Root} element={<Layout />}>
           <Route index element={<MainScreen />} />
+          <Route path={AppRoute.Error} element={<ServerErrorScreen />} />
           <Route path={AppRoute.SignIn} element={<SignInScreen />} />
           <Route path={AppRoute.Film} element={<FilmScreen />} />
           <Route path={AppRoute.Player} element={<PlayerScreen />} />
