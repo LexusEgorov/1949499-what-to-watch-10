@@ -34,7 +34,7 @@ function Header() : JSX.Element {
             {
               isAuthorized
                 ?
-                <a className="user-block__link"
+                <a href='/main' className="user-block__link"
                   onClick={(evt) => {
                     evt.preventDefault();
                     dispatch(logoutAction());

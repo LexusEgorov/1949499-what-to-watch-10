@@ -16,13 +16,13 @@ function Videoplayer({src, imgSrc} : VideoplayerProps) : JSX.Element {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const mouseOverHandler = () => {
+  const handleMouseOver = () => {
     timeout = setTimeout(() => {
       setIsPlaying(true);
     }, Video.DELAY);
   };
 
-  const mouseLeaveHandler = () => {
+  const handleMouseLeave = () => {
     setIsPlaying(false);
     clearTimeout(timeout);
   };
@@ -41,8 +41,8 @@ function Videoplayer({src, imgSrc} : VideoplayerProps) : JSX.Element {
 
   return (
     <div className='small-film-card__image'
-      onMouseOver={mouseOverHandler}
-      onMouseLeave={mouseLeaveHandler}
+      onMouseOver={handleMouseOver}
+      onMouseLeave={handleMouseLeave}
     >
       <video muted poster={imgSrc} ref={videoRef} width="280" height="175">
         <source src={src} type="video/mp4"/>

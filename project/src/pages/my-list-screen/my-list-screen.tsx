@@ -25,7 +25,7 @@ function MyListScreen() : JSX.Element {
             </div>
           </li>
           <li className="user-block__item">
-            <a className="user-block__link"
+            <a href='/main' className="user-block__link"
               onClick={(evt) => {
                 evt.preventDefault();
                 dispatch(logoutAction());

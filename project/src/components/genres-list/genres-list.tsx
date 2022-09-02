@@ -28,7 +28,7 @@ function GenresList({films} : GenresListProps) : JSX.Element {
               })
             }
           >
-            <a href="#" className="catalog__genres-link"
+            <a href="/main" className="catalog__genres-link"
               onClick={(evt) => {
                 evt.preventDefault();
                 dispatch(Action.GENRE.SET({genre: genre}));

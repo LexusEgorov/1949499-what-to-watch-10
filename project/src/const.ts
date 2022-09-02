@@ -38,7 +38,7 @@ export enum RatingLevel {
   VeryGood = 8,
 }
 
-export const MONTHS = [
+export enum Months {
   'January',
   'February',
   'March',
@@ -51,7 +51,7 @@ export const MONTHS = [
   'October',
   'November',
   'December',
-];
+}
 
 export const DEFAULT_FILTER = 'All genres';
 

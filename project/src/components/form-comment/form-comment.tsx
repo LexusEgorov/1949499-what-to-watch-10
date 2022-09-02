@@ -2,7 +2,9 @@ import { FormEvent, Fragment, useState} from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { sendCommentAction } from '../../store/api-actions';
 
-const RATINGS = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+const ratings = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+const COMMENT_MIN_LENGTH = 50;
+const COMMENT_MAX_LENGTH = 400;
 
 function FormComment() : JSX.Element{
   const dispatch = useAppDispatch();
@@ -11,7 +13,7 @@ function FormComment() : JSX.Element{
   const [isFormActive, setIsFormActive] = useState(true);
   const {rating, comment, isValide} = formState;
 
-  const validateForm = (text : string, rate: number) => (rate !== 0 && text.length >= 50 && text.length <= 400);
+  const validateForm = (text : string, rate: number) => (rate !== 0 && text.length >= COMMENT_MIN_LENGTH && text.length <= COMMENT_MAX_LENGTH);
 
   const submitHandler = (evt : FormEvent) => {
     evt.preventDefault();
@@ -25,7 +27,7 @@ function FormComment() : JSX.Element{
         <div className="rating">
           <div className="rating__stars">
             {
-              RATINGS.map((rate) => (
+              ratings.map((rate) => (
                 <Fragment key={rate}>
                   <input className="rating__input" id={`star-${rate}`} type="radio" name="rating" value={rate}
                     disabled={!isFormActive}
