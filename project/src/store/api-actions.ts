@@ -56,12 +56,8 @@ export const fetchFilmCommentsAction = createAsyncThunk<void, number, {
 }>(
   'film/load',
   async (id, {dispatch, extra: api}) => {
-    try{
-      const {data} = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
-      dispatch(Action.FILMS.SET_CURRENT_COMMENTS({currentFilmComments: data}));
-    } catch {
-      dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.Error));
-    }
+    const {data} = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
+    dispatch(Action.FILMS.SET_CURRENT_COMMENTS({currentFilmComments: data}));
   }
 );
 

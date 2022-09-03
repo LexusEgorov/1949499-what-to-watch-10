@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
@@ -25,9 +26,9 @@ function FilmScreen() : JSX.Element {
   } = currentFilm;
 
   useEffect(() => {
-    dispatch(fetchFilmAction(filmId));
     dispatch(fetchSimilarAction(filmId));
     dispatch(fetchFilmCommentsAction(filmId));
+    dispatch(fetchFilmAction(filmId));
   }, [dispatch, filmId]);
 
   if(!currentFilm.id){

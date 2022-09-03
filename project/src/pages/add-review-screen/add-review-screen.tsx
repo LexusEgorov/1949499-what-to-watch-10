@@ -1,12 +1,22 @@
-import { Link, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import FormComment from '../../components/form-comment/form-comment';
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { logoutAction } from '../../store/api-actions';
+import { fetchFilmAction, logoutAction } from '../../store/api-actions';
 
 function AddReviewScreen(): JSX.Element {
-  const {currentFilm, userData} = useAppSelector((state) => state);
+  const filmId = useParams().id;
   const dispatch = useAppDispatch();
+
+  let isNotFound = false;
+
+  useEffect(() => {
+    dispatch(fetchFilmAction(Number(filmId)));
+  }, [dispatch, filmId, isNotFound]);
+
+  const {currentFilm, userData} = useAppSelector((state) => state);
+
   const{
     id,
     name,
@@ -16,7 +26,11 @@ function AddReviewScreen(): JSX.Element {
   } = currentFilm;
 
   if(!currentFilm.id){
-    return <Navigate to={'/404'} />;
+    if(isNotFound){
+      return <Navigate to={'/404'} />;
+    }
+
+    isNotFound = true;
   }
 
   return (

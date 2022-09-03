@@ -16,7 +16,8 @@ import browserHistory from '../../browser-history';
 import ServerErrorScreen from '../../pages/server-error-screen/server-error-screen';
 
 function App(): JSX.Element {
-  const {isFilmsLoaded, isPromoFilmLoaded} = useAppSelector((state) => state);
+  const {isFilmsLoaded, isPromoFilmLoaded, authorizationStatus} = useAppSelector((state) => state);
+
   if(isFilmsLoaded || isPromoFilmLoaded){
     return <LoadingScreen />;
   }
@@ -33,7 +34,7 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.MyList}
             element={
-              <PrivateRoute>
+              <PrivateRoute authorizationStatus={authorizationStatus}>
                 <MyListScreen/>
               </PrivateRoute>
             }
@@ -41,7 +42,7 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.AddReview}
             element={
-              <PrivateRoute>
+              <PrivateRoute authorizationStatus={authorizationStatus}>
                 <AddRewiewScreen/>
               </PrivateRoute>
             }
