@@ -36,6 +36,7 @@ function Videoplayer({src, imgSrc} : VideoplayerProps) : JSX.Element {
       videoRef.current.play();
       return;
     }
+
     videoRef.current.load();
   }, [isPlaying]);
 

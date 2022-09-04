@@ -1,8 +1,9 @@
 import { useAppSelector } from '../../hooks/hooks';
+import { getCurrentFilmComments } from '../../store/films-data/selectors';
 import Comment from '../comment/comment';
 
 function ReviewsTab() : JSX.Element {
-  const {currentFilmComments} = useAppSelector((state) => state);
+  const currentFilmComments = useAppSelector(getCurrentFilmComments);
 
   return (
     <div className="film-card__reviews film-card__row">

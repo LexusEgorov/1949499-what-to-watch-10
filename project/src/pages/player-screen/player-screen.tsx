@@ -1,44 +1,107 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { fetchFilmAction } from '../../store/api-actions';
+import { getCurrentFilm } from '../../store/films-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 
 const TIME_INTERPRETATION = 60;
-const SECOND = 1000;
 const TIME_STEP = 59;
 
-let timer: NodeJS.Timeout | undefined;
+type RunTime = {
+  hours: number,
+  minutes: number,
+  seconds: number,
+};
 
-const getTimeLeft = (minutes : number) => (
-  {
-    hours: Math.floor(minutes / TIME_INTERPRETATION),
-    minutes: minutes - Math.floor(minutes / TIME_INTERPRETATION) * TIME_INTERPRETATION,
+function checkTime(){
+  let lastTime = 0;
+
+  return function(time : number | undefined){
+    if(!time){
+      return false;
+    }
+
+    if(lastTime < Math.floor(time)){
+      lastTime++;
+      return true;
+    }
+
+    return false;
+  };
+}
+
+const isSecondPassed = checkTime();
+
+const getFormattedTime = (runTime: RunTime) : string => {
+  const {hours, minutes, seconds} = runTime;
+  return `-${hours < 10 && hours > 0 ? '0' : ''}${hours > 0 ? `${hours}:` : ''}${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
+
+const getTimeDecomposition = (runTime: number) : RunTime => {
+  const minutesToHours = Math.floor(runTime / TIME_INTERPRETATION);
+  const decomposedTime = {
+    hours: minutesToHours,
+    minutes: Math.floor(runTime - minutesToHours * TIME_INTERPRETATION),
     seconds: 0,
-  }
-);
+  };
+
+  return decomposedTime;
+};
 
 function PlayerScreen(): JSX.Element {
   const filmId = Number(useParams().id);
-  const {currentFilm} = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
+  const currentFilm = useAppSelector(getCurrentFilm);
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  useEffect(() => {
+    if(filmId !== currentFilm.id){
+      dispatch(fetchFilmAction(filmId));
+    }
+  }, [currentFilm.id, dispatch, filmId]);
 
   const {
     videoLink,
     previewImage,
     runTime,
+    name,
   } = currentFilm;
 
-  const [timeLeft, setTimeLeft] = useState(getTimeLeft(runTime));
+  const [timeLeft, setTimeLeft] = useState(getTimeDecomposition(runTime));
+  const [formattedTime, setFormattedTime] = useState(getFormattedTime(timeLeft));
 
-  useEffect(() => {
-    dispatch(fetchFilmAction(filmId));
-  }, [dispatch, currentFilm, filmId]);
+  const handlePlay = () => setIsPlaying(!isPlaying);
+  const handleFullScreen = () => setIsFullScreen(!isFullScreen);
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const handleChangeTime = (passedTime : number | undefined) => {
+    const currentTime = timeLeft;
+
+    if(isSecondPassed(passedTime)){
+      currentTime.seconds--;
+
+      if(currentTime.seconds < 0){
+        currentTime.minutes--;
+        currentTime.seconds = TIME_STEP;
+      }
+
+      if(currentTime.minutes < 0){
+        currentTime.hours--;
+        currentTime.minutes = TIME_STEP;
+      }
+
+      if(currentTime.minutes === 0 && currentTime.hours === 0 && currentTime.seconds === 0){
+        setIsPlaying(false);
+        videoRef.current?.load();
+      }
+
+      setTimeLeft(currentTime);
+      setFormattedTime(getFormattedTime(currentTime));
+    }
+  };
 
   useEffect(() => {
     if(videoRef.current === null){
@@ -50,52 +113,28 @@ function PlayerScreen(): JSX.Element {
       setIsFullScreen(false);
     }
 
-    if(isPlaying) {
-      videoRef.current.play();
-
-      timer = setInterval(() => {
-        const currentTime = timeLeft;
-        currentTime.seconds--;
-        if(currentTime.seconds < 0){
-          currentTime.minutes--;
-          currentTime.seconds = TIME_STEP;
-        }
-        if(currentTime.minutes < 0){
-          currentTime.hours--;
-          currentTime.minutes = TIME_STEP;
-        }
-        if(currentTime.minutes === 0 && currentTime.hours === 0 && currentTime.seconds === 0){
-          videoRef.current?.load();
-          setIsPlaying(false);
-        }
-        setTimeLeft(currentTime);
-      }, SECOND);
-    } else {
-      clearInterval(timer);
-      videoRef.current.pause();
-    }
-
-  }, [isPlaying, isFullScreen]);
-
-  const playHandler = () => {
     if(isPlaying){
-      setIsPlaying(false);
+      videoRef.current.play();
       return;
     }
 
-    setIsPlaying(true);
-  };
+    videoRef.current.pause();
+  }, [isFullScreen, isPlaying]);
 
-  const fullScreenHandler = () => {
-    setIsFullScreen(true);
-  };
-
-  if(!currentFilm.videoLink){
+  if(!currentFilm.id){
     return <LoadingScreen />;
   }
+
   return (
     <div className="player">
-      <video src={videoLink} ref={videoRef} className="player__video" poster={previewImage}></video>
+      <video
+        src={videoLink}
+        ref={videoRef}
+        className="player__video"
+        poster={previewImage}
+        onTimeUpdate={() => {handleChangeTime(videoRef.current?.currentTime);}}
+      >
+      </video>
       <Link to={`/films/${currentFilm.id}`} type="button" className="player__exit">Exit</Link>
       <div className="player__controls">
         <div className="player__controls-row">
@@ -103,14 +142,11 @@ function PlayerScreen(): JSX.Element {
             <progress className="player__progress" value="30" max="100"></progress>
             <div className="player__toggler" style={{left: '30%'}}>Toggler</div>
           </div>
-          <div className="player__time-value">{
-            `-${timeLeft.hours < 10 && timeLeft.hours ? '0' : ''}${timeLeft.hours ? `${timeLeft.hours}:` : ''}${timeLeft.minutes < 10 ? '0' : ''}${timeLeft.minutes}:${timeLeft.seconds < 10 ? '0' : ''}${timeLeft.seconds}`
-          }
-          </div>
+          <div className="player__time-value">{formattedTime}</div>
         </div>
         <div className="player__controls-row">
           <button type="button" className="player__play"
-            onClick={playHandler}
+            onClick={handlePlay}
           >
             {
               !isPlaying ?
@@ -133,9 +169,9 @@ function PlayerScreen(): JSX.Element {
                 )
             }
           </button>
-          <div className="player__name">Transpotting</div>
+          <div className="player__name">{name}</div>
           <button type="button" className="player__full-screen"
-            onClick={fullScreenHandler}
+            onClick={handleFullScreen}
           >
             <svg viewBox="0 0 27 27" width="27" height="27">
               <use xlinkHref="#full-screen"></use>

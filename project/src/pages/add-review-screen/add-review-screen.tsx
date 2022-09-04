@@ -4,18 +4,22 @@ import FormComment from '../../components/form-comment/form-comment';
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { fetchFilmAction, logoutAction } from '../../store/api-actions';
+import { getCurrentFilm } from '../../store/films-data/selectors';
+import { getUserData } from '../../store/user-process/selectors';
 
 function AddReviewScreen(): JSX.Element {
   const filmId = useParams().id;
   const dispatch = useAppDispatch();
-
+  const currentFilm = useAppSelector(getCurrentFilm);
   let isNotFound = false;
 
   useEffect(() => {
-    dispatch(fetchFilmAction(Number(filmId)));
-  }, [dispatch, filmId, isNotFound]);
+    if(!currentFilm.id){
+      dispatch(fetchFilmAction(Number(filmId)));
+    }
+  }, [currentFilm.id, dispatch, filmId, isNotFound]);
 
-  const {currentFilm, userData} = useAppSelector((state) => state);
+  const userData = useAppSelector(getUserData);
 
   const{
     id,

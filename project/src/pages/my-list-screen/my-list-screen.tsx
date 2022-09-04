@@ -2,9 +2,12 @@ import { Link } from 'react-router-dom';
 import Card from '../../components/card/card';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { logoutAction } from '../../store/api-actions';
+import { getFavoriteFilms } from '../../store/films-data/selectors';
+import { getUserData } from '../../store/user-process/selectors';
 
 function MyListScreen() : JSX.Element {
-  const {favoriteFilms, userData} = useAppSelector((state) => state);
+  const favoriteFilms = useAppSelector(getFavoriteFilms);
+  const userData = useAppSelector(getUserData);
   const dispatch = useAppDispatch();
 
   return (

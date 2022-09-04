@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
@@ -7,13 +6,26 @@ import Tabs from '../../components/tabs/tabs';
 import { AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { changeFilmStatus, fetchFilmAction, fetchFilmCommentsAction, fetchSimilarAction } from '../../store/api-actions';
-import { getFilteredFilms } from '../../store/selectors';
+import { getCurrentFilm, getFavoriteFilms, getFilteredFilms } from '../../store/films-data/selectors';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 
 function FilmScreen() : JSX.Element {
   const dispatch = useAppDispatch();
+
   const filmId = Number(useParams().id);
-  const {currentFilm, favoriteFilms, authorizationStatus} = useAppSelector((state) => state);
+  const currentFilm = useAppSelector(getCurrentFilm);
+
+  useEffect(() => {
+    if(!currentFilm.id){
+      dispatch(fetchFilmAction(filmId));
+      dispatch(fetchSimilarAction(filmId));
+      dispatch(fetchFilmCommentsAction(filmId));
+    }
+  }, [currentFilm.id, dispatch, filmId]);
+
+  const favoriteFilms = useAppSelector(getFavoriteFilms);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const filteredFilms = useAppSelector(getFilteredFilms);
 
   const {
@@ -24,12 +36,6 @@ function FilmScreen() : JSX.Element {
     backgroundColor,
     posterImage,
   } = currentFilm;
-
-  useEffect(() => {
-    dispatch(fetchSimilarAction(filmId));
-    dispatch(fetchFilmCommentsAction(filmId));
-    dispatch(fetchFilmAction(filmId));
-  }, [dispatch, filmId]);
 
   if(!currentFilm.id){
     return <LoadingScreen />;

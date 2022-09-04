@@ -1,6 +1,8 @@
 import { FormEvent, Fragment, useState} from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { sendCommentAction } from '../../store/api-actions';
+import { resetCurrentFilm } from '../../store/films-data/films-data';
+import { getCurrentFilm } from '../../store/films-data/selectors';
 
 const ratings = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 const COMMENT_MIN_LENGTH = 50;
@@ -8,22 +10,23 @@ const COMMENT_MAX_LENGTH = 400;
 
 function FormComment() : JSX.Element{
   const dispatch = useAppDispatch();
-  const {currentFilm} = useAppSelector((state) => state);
+  const currentFilm = useAppSelector(getCurrentFilm);
   const [formState, setFormState] = useState({rating: 0, comment: '', isValide: false});
   const [isFormActive, setIsFormActive] = useState(true);
   const {rating, comment, isValide} = formState;
 
   const validateForm = (text : string, rate: number) => (rate !== 0 && text.length >= COMMENT_MIN_LENGTH && text.length <= COMMENT_MAX_LENGTH);
 
-  const submitHandler = (evt : FormEvent) => {
+  const handleSubmit = (evt : FormEvent) => {
     evt.preventDefault();
     setIsFormActive(false);
     dispatch(sendCommentAction({comment: comment, rating: rating, filmId: currentFilm.id}));
+    dispatch(resetCurrentFilm());
   };
 
   return (
     <div className="add-review">
-      <form action="#" className="add-review__form" onSubmit={submitHandler}>
+      <form action="#" className="add-review__form" onSubmit={handleSubmit}>
         <div className="rating">
           <div className="rating__stars">
             {
