@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { Action } from '../../store/action';
 import { fetchFilmAction } from '../../store/api-actions';
 import { getCurrentFilm } from '../../store/films-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
@@ -56,6 +58,7 @@ function PlayerScreen(): JSX.Element {
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   useEffect(() => {
@@ -103,9 +106,15 @@ function PlayerScreen(): JSX.Element {
     }
   };
 
+  const handleError = () => setIsError(true);
+
   useEffect(() => {
     if(videoRef.current === null){
       return;
+    }
+
+    if(isError){
+      dispatch(Action.APP.REDIRECT_TO_ROUTE(AppRoute.NotFound));
     }
 
     if(isFullScreen){
@@ -119,7 +128,7 @@ function PlayerScreen(): JSX.Element {
     }
 
     videoRef.current.pause();
-  }, [isFullScreen, isPlaying]);
+  }, [dispatch, isError, isFullScreen, isPlaying]);
 
   if(!currentFilm.id){
     return <LoadingScreen />;
@@ -133,6 +142,8 @@ function PlayerScreen(): JSX.Element {
         className="player__video"
         poster={previewImage}
         onTimeUpdate={() => {handleChangeTime(videoRef.current?.currentTime);}}
+        // eslint-disable-next-line no-console
+        onError={handleError}
       >
       </video>
       <Link to={`/films/${currentFilm.id}`} type="button" className="player__exit">Exit</Link>

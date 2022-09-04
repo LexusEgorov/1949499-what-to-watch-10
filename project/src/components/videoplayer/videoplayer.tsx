@@ -14,6 +14,7 @@ let timeout: NodeJS.Timeout;
 
 function Videoplayer({src, imgSrc} : VideoplayerProps) : JSX.Element {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isError, setIsError] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleMouseOver = () => {
@@ -28,7 +29,7 @@ function Videoplayer({src, imgSrc} : VideoplayerProps) : JSX.Element {
   };
 
   useEffect(() => {
-    if(videoRef.current === null){
+    if(videoRef.current === null || isError){
       return;
     }
 
@@ -38,14 +39,16 @@ function Videoplayer({src, imgSrc} : VideoplayerProps) : JSX.Element {
     }
 
     videoRef.current.load();
-  }, [isPlaying]);
+  }, [isError, isPlaying]);
 
   return (
     <div className='small-film-card__image'
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
     >
-      <video muted poster={imgSrc} ref={videoRef} width="280" height="175">
+      <video muted poster={imgSrc} ref={videoRef} width="280" height="175"
+        onError={() => {setIsError(true);}}
+      >
         <source src={src} type="video/mp4"/>
       </video>
     </div>
