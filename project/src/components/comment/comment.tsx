@@ -1,4 +1,4 @@
-import { MONTHS } from '../../const';
+import { Months } from '../../const';
 import { CommentType } from '../../types/comments';
 
 type CommentProps = {
@@ -7,7 +7,6 @@ type CommentProps = {
 
 function Comment({commentary} : CommentProps) : JSX.Element {
   const {comment, user, rating, date} = commentary;
-
   const formattedDate = new Date(date);
   const month = formattedDate.getMonth();
   const day = formattedDate.getDate();
@@ -18,7 +17,7 @@ function Comment({commentary} : CommentProps) : JSX.Element {
         <p className="review__text">{comment}</p>
         <footer className="review__details">
           <cite className="review__author">{user.name}</cite>
-          <time className="review__date" dateTime={date}>{`${MONTHS[month]} ${day}, ${year}`}</time>
+          <time className="review__date" dateTime={date}>{`${Months[month]} ${day}, ${year}`}</time>
         </footer>
       </blockquote>
       <div className="review__rating">{rating.toFixed(1)}</div>

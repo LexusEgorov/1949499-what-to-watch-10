@@ -3,24 +3,29 @@ import {Link} from 'react-router-dom';
 import FilmsList from '../../components/films-list/films-list';
 import GenresList from '../../components/genres-list/genres-list';
 import Header from '../../components/header/header';
-import { AuthorizationStatus, DEFAULT_FILTER, FILMS_BLOCK } from '../../const';
+import { AuthorizationStatus, FILMS_BLOCK } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { Action } from '../../store/action';
 import { changeFilmStatus } from '../../store/api-actions';
-import { getFilteredFilms } from '../../store/selectors';
-import Film from '../../types/film';
+import { resetError } from '../../store/app-process/app-process';
+import { resetCurrentFilm } from '../../store/films-data/films-data';
+import { getFavoriteFilms, getFilms, getFilteredFilms, getPromoFilm } from '../../store/films-data/selectors';
+import { resetGenre } from '../../store/genres-data/genres-data';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 function MainScreen() : JSX.Element{
   const dispatch = useAppDispatch();
 
-  const changeFilmStatusHandler = () => {
+  const handleChangeFilmStatus = () => {
     dispatch(changeFilmStatus({filmId: promoFilm.id, filmStatus: !promoFilm.isFavorite}));
   };
 
 
   const [countFilms, setCountFilms] = useState(FILMS_BLOCK);
 
-  const {promoFilm, films, favoriteFilms, authorizationStatus} = useAppSelector((state) => state);
+  const promoFilm = useAppSelector(getPromoFilm);
+  const films = useAppSelector(getFilms);
+  const favoriteFilms = useAppSelector(getFavoriteFilms);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   const {
     posterImage,
@@ -36,9 +41,9 @@ function MainScreen() : JSX.Element{
   const [isMoreFilms, setIsMoreFilms] = useState(slicedFilteredFilms.length < filteredFilms.length);
 
   useEffect(() => {
-    dispatch(Action.GENRE.SET({genre: DEFAULT_FILTER}));
-    dispatch(Action.FILMS.SET_CURRENT({currentFilm: {} as Film}));
-    dispatch(Action.FILMS.SET_CURRENT_COMMENTS({currentFilmComments: []}));
+    dispatch(resetError());
+    dispatch(resetCurrentFilm());
+    dispatch(resetGenre());
   }, [dispatch]);
 
   useEffect(() => {
@@ -75,7 +80,7 @@ function MainScreen() : JSX.Element{
                   authorizationStatus === AuthorizationStatus.Auth ?
                     (
                       <button className="btn btn--list film-card__button" type="button"
-                        onClick={changeFilmStatusHandler}
+                        onClick={handleChangeFilmStatus}
                       >
                         {
                           !promoFilm.isFavorite ?
@@ -125,7 +130,7 @@ function MainScreen() : JSX.Element{
         </section>
         <footer className="page-footer">
           <div className="logo">
-            <a className="logo__link logo__link--light">
+            <a href='/' className="logo__link logo__link--light">
               <span className="logo__letter logo__letter--1">W</span>
               <span className="logo__letter logo__letter--2">T</span>
               <span className="logo__letter logo__letter--3">W</span>

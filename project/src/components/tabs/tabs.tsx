@@ -31,7 +31,7 @@ function Tabs ({currentFilm} : TabsProps) : JSX.Element {
       <nav className="film-nav film-card__nav">
         <ul className="film-nav__list">
           <li className={`film-nav__item ${currentTab === FilmTabs.Overview ? 'film-nav__item--active' : ''}`}>
-            <a href="#" className="film-nav__link"
+            <a href="#film" className="film-nav__link"
               onClick={(evt) => {
                 evt.preventDefault();
                 setCurrentTab(FilmTabs.Overview);
@@ -41,7 +41,7 @@ function Tabs ({currentFilm} : TabsProps) : JSX.Element {
             </a>
           </li>
           <li className={`film-nav__item ${currentTab === FilmTabs.Details ? 'film-nav__item--active' : ''}`}>
-            <a href="#" className="film-nav__link"
+            <a href="#film" className="film-nav__link"
               onClick={(evt) => {
                 evt.preventDefault();
                 setCurrentTab(FilmTabs.Details);
@@ -51,7 +51,7 @@ function Tabs ({currentFilm} : TabsProps) : JSX.Element {
             </a>
           </li>
           <li className={`film-nav__item ${currentTab === FilmTabs.Reviews ? 'film-nav__item--active' : ''}`}>
-            <a href="#" className="film-nav__link"
+            <a href="#film" className="film-nav__link"
               onClick={(evt) => {
                 evt.preventDefault();
                 setCurrentTab(FilmTabs.Reviews);

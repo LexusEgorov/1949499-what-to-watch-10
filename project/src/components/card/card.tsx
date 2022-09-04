@@ -13,9 +13,12 @@ function Card({film} : CardProps):JSX.Element{
     id,
     name,
   } = film;
+
   return (
     <article className="small-film-card catalog__films-card">
-      <Videoplayer src={previewVideoLink} imgSrc={previewImage}/>
+      <Link to={`/films/${id}`} className="small-film-card__link">
+        <Videoplayer src={previewVideoLink} imgSrc={previewImage}/>
+      </Link>
       <h3 className="small-film-card__title">
         <Link to={`/films/${id}`} className="small-film-card__link">
           {name}

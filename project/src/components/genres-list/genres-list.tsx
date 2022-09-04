@@ -1,7 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { Action } from '../../store/action';
 import Films from '../../types/films';
 import classNames from 'classnames';
+import { getCurrentGenre } from '../../store/genres-data/selectors';
+import { setGenre } from '../../store/genres-data/genres-data';
 
 const GENRES_MAX_COUNT = 10;
 
@@ -11,7 +12,7 @@ type GenresListProps = {
 
 function GenresList({films} : GenresListProps) : JSX.Element {
   const dispatch = useAppDispatch();
-  const {currentGenre} = useAppSelector((state) => state);
+  const currentGenre = useAppSelector(getCurrentGenre);
 
   const genres : Set<string> = new Set();
   genres.add('All genres');
@@ -28,10 +29,10 @@ function GenresList({films} : GenresListProps) : JSX.Element {
               })
             }
           >
-            <a href="#" className="catalog__genres-link"
+            <a href="/main" className="catalog__genres-link"
               onClick={(evt) => {
                 evt.preventDefault();
-                dispatch(Action.GENRE.SET({genre: genre}));
+                dispatch(setGenre(genre));
               }}
             >
               {genre}

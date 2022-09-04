@@ -1,12 +1,26 @@
-import { Link, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import FormComment from '../../components/form-comment/form-comment';
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { logoutAction } from '../../store/api-actions';
+import { fetchFilmAction, logoutAction } from '../../store/api-actions';
+import { getCurrentFilm } from '../../store/films-data/selectors';
+import { getUserData } from '../../store/user-process/selectors';
 
 function AddReviewScreen(): JSX.Element {
-  const {currentFilm, userData} = useAppSelector((state) => state);
+  const filmId = useParams().id;
   const dispatch = useAppDispatch();
+  const currentFilm = useAppSelector(getCurrentFilm);
+  let isNotFound = false;
+
+  useEffect(() => {
+    if(!currentFilm.id){
+      dispatch(fetchFilmAction(Number(filmId)));
+    }
+  }, [currentFilm.id, dispatch, filmId, isNotFound]);
+
+  const userData = useAppSelector(getUserData);
+
   const{
     id,
     name,
@@ -16,7 +30,11 @@ function AddReviewScreen(): JSX.Element {
   } = currentFilm;
 
   if(!currentFilm.id){
-    return <Navigate to={'/404'} />;
+    if(isNotFound){
+      return <Navigate to={'/404'} />;
+    }
+
+    isNotFound = true;
   }
 
   return (
@@ -44,7 +62,7 @@ function AddReviewScreen(): JSX.Element {
                 <Link to={`/films/${id}`} className="breadcrumbs__link">{name}</Link>
               </li>
               <li className="breadcrumbs__item">
-                <a className="breadcrumbs__link">Add review</a>
+                <a href='/review' className="breadcrumbs__link">Add review</a>
               </li>
             </ul>
           </nav>
@@ -55,7 +73,7 @@ function AddReviewScreen(): JSX.Element {
               </div>
             </Link>
             <li className="user-block__item">
-              <a className="user-block__link"
+              <a href='/main' className="user-block__link"
                 onClick={(evt) => {
                   evt.preventDefault();
                   dispatch(logoutAction());

@@ -6,8 +6,8 @@ export enum AppRoute {
   AddReview = '/films/:id/review',
   Player = '/player/:id',
   Films = '/films',
-  NotFound = '/404',
   Error = '/error',
+  NotFound = '/404',
 }
 
 export enum AuthorizationStatus {
@@ -38,7 +38,7 @@ export enum RatingLevel {
   VeryGood = 8,
 }
 
-export const MONTHS = [
+export enum Months {
   'January',
   'February',
   'March',
@@ -51,7 +51,14 @@ export const MONTHS = [
   'October',
   'November',
   'December',
-];
+}
+
+export enum NameSpace {
+  App = 'APP',
+  User = 'USER',
+  Genre = 'GENRE',
+  Film = 'FILM',
+}
 
 export const DEFAULT_FILTER = 'All genres';
 
